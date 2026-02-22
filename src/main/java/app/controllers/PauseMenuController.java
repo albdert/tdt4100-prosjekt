@@ -16,7 +16,7 @@ public class PauseMenuController {
     private void handleButtonClick(ActionEvent e) throws IOException {
         String id = ( (Button)e.getSource() ).getId();
         switch (id) {
-            case "mainmenu" -> {mainMenu();}
+            case "mainmenu" -> {menu();}
             case "resume"   -> {resume();}
         }
     }
@@ -25,7 +25,7 @@ public class PauseMenuController {
         this.gc = gc;
     }
 
-    private void mainMenu() throws IOException {
+    private void menu() throws IOException {
         SceneManager.getInstance().setScene(Paths.MENU);
     }
 

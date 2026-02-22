@@ -28,6 +28,7 @@ public class MainMenuController {
             }
         }
     }   
+    //TODO: fjerne denne funksjonen når den ikke trengs lengre
     private void debug() {
         Parent root = SceneManager.getInstance().getStage().getScene().getRoot();
         System.out.println("\n");
@@ -36,6 +37,7 @@ public class MainMenuController {
         System.out.println("\n");
     }
 
+    //TODO: endre funksjon til et mer generelt navn
     private void launchGame(String path) throws IOException {
         SceneManager.getInstance().setScene(path);
     }

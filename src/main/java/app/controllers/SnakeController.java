@@ -3,15 +3,13 @@ package app.controllers;
 import app.SceneManager;
 import app.snake.Player;
 import app.snake.SnakeLoop;
+
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
-// import snake game components
-//import app.snake.Player;
 
 public class SnakeController extends GameController {
     private static final int ROWS = 30;
@@ -63,7 +61,7 @@ public class SnakeController extends GameController {
 
     @Override
     protected void pauseGame() {
-        // TODO Auto-generated method stub
+        // TODO: rydde opp i denne funksjonen
         //throw new UnsupportedOperationException("Unimplemented method 'pauseGame'");
         System.out.println("\n\nPaused game\n\n");
         loop.stop();
@@ -71,7 +69,7 @@ public class SnakeController extends GameController {
 
     @Override
     protected void resumeGame() {
-        // TODO Auto-generated method stub
+        // TODO: rydde opp i denne funksjonen
         //throw new UnsupportedOperationException("Unimplemented method 'resumeGame'");
         System.out.println("\n\nUn-paused game\n\n");
         loop.start();
