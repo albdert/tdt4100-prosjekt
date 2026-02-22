@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>JavaFX Startup Process</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0f1117;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+  h1 {
+    text-align: center;
+    color: #a78bfa;
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.8rem;
+    margin-bottom: 40px;
+  }
+  .diagram {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Actors row */
+  .actors {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    width: 100%;
+    margin-bottom: 0;
+  }
+  .actor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .actor-box {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    width: 130px;
+    border: 2px solid;
+  }
+  .actor-box.main    { background: #1e1b4b; border-color: #6366f1; color: #a5b4fc; }
+  .actor-box.javafx  { background: #1a2e1a; border-color: #4ade80; color: #86efac; }
+  .actor-box.app     { background: #1e1b4b; border-color: #a78bfa; color: #c4b5fd; }
+  .actor-box.scene   { background: #1c1a2e; border-color: #f472b6; color: #f9a8d4; }
+
+  /* Lifelines */
+  .lifelines {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    width: 100%;
+    position: relative;
+  }
+  .lifeline-col {
+    display: flex;
+    justify-content: center;
+  }
+  .lifeline {
+    width: 2px;
+    background: repeating-linear-gradient(
+      to bottom,
+      #374151 0px,
+      #374151 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  }
+
+  /* Steps container overlays the lifelines */
+  .steps-wrapper {
+    width: 100%;
+    position: relative;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    width: 100%;
+    position: relative;
+    min-height: 60px;
+    align-items: center;
+  }
+  /* vertical line segments per step */
+  .step::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+    pointer-events: none;
+  }
+
+  .vline {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    position: relative;
+  }
+  .vline::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: repeating-linear-gradient(
+      to bottom,
+      #374151 0px,
+      #374151 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  }
+
+  /* Arrows */
+  .arrow-row {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    z-index: 10;
+  }
+  .arrow-line {
+    height: 2px;
+    background: currentColor;
+    position: relative;
+  }
+  .arrow-line::after {
+    content: '';
+    position: absolute;
+    right: -1px; top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-left-color: currentColor;
+  }
+  .arrow-line.reverse::after {
+    right: auto; left: -1px;
+    border-left-color: transparent;
+    border-right-color: currentColor;
+  }
+  .arrow-label {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.68rem;
+    white-space: nowrap;
+    font-weight: 500;
+    background: #0f1117;
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  .arrow-sublabel {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    white-space: nowrap;
+    color: #6b7280;
+    background: #0f1117;
+    padding: 1px 4px;
+  }
+
+  /* Color classes */
+  .c-indigo  { color: #818cf8; }
+  .c-green   { color: #4ade80; }
+  .c-purple  { color: #c084fc; }
+  .c-pink    { color: #f472b6; }
+  .c-yellow  { color: #fbbf24; }
+  .c-gray    { color: #9ca3af; }
+
+  /* Activation boxes */
+  .activation {
+    position: absolute;
+    width: 12px;
+    border-radius: 3px;
+    z-index: 5;
+  }
+
+  /* Section labels */
+  .section-label {
+    width: 100%;
+    text-align: left;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #4b5563;
+    padding: 16px 0 4px 0;
+    border-top: 1px solid #1f2937;
+    margin-top: 8px;
+  }
+
+  /* Note boxes */
+  .note {
+    position: absolute;
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.65rem;
+    color: #9ca3af;
+    max-width: 140px;
+    z-index: 20;
+  }
+
+  /* Legend */
+  .legend {
+    max-width: 720px;
+    margin: 32px auto 0;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    color: #9ca3af;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  /* Use SVG for the actual diagram for precision */
+  svg {
+    width: 100%;
+    max-width: 720px;
+    display: block;
+    margin: 0 auto;
+    overflow: visible;
+  }
+</style>
+</head>
+<body>
+
+<h1>JavaFX Startup Process</h1>
+<p class="subtitle">How main(), the JavaFX runtime, App, and SceneManager interact on startup</p>
+
+<svg viewBox="0 0 720 780" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#818cf8"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4ade80"/>
+    </marker>
+    <marker id="arr-purple" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#c084fc"/>
+    </marker>
+    <marker id="arr-pink" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#f472b6"/>
+    </marker>
+    <marker id="arr-yellow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arr-gray" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#9ca3af"/>
+    </marker>
+    <marker id="arr-back" markerWidth="8" markerHeight="8" refX="1" refY="3" orient="auto">
+      <path d="M8,0 L8,6 L0,3 z" fill="#9ca3af"/>
+    </marker>
+    <marker id="arr-back-green" markerWidth="8" markerHeight="8" refX="1" refY="3" orient="auto">
+      <path d="M8,0 L8,6 L0,3 z" fill="#4ade80"/>
+    </marker>
+    <marker id="arr-back-purple" markerWidth="8" markerHeight="8" refX="1" refY="3" orient="auto">
+      <path d="M8,0 L8,6 L0,3 z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- ===== ACTOR BOXES ===== -->
+  <!-- Col centers: main=90, javafx=250, app=450, scene=630 -->
+
+  <!-- main() -->
+  <rect x="30" y="20" width="120" height="36" rx="8" fill="#1e1b4b" stroke="#6366f1" stroke-width="2"/>
+  <text x="90" y="43" text-anchor="middle" fill="#a5b4fc" font-size="13" font-weight="600">main()</text>
+
+  <!-- JavaFX Runtime -->
+  <rect x="185" y="20" width="130" height="36" rx="8" fill="#1a2e1a" stroke="#4ade80" stroke-width="2"/>
+  <text x="250" y="38" text-anchor="middle" fill="#86efac" font-size="12" font-weight="600">JavaFX Runtime</text>
+  <text x="250" y="52" text-anchor="middle" fill="#6ee7b7" font-size="10">(Application)</text>
+
+  <!-- App.java -->
+  <rect x="385" y="20" width="130" height="36" rx="8" fill="#1e1b4b" stroke="#a78bfa" stroke-width="2"/>
+  <text x="450" y="38" text-anchor="middle" fill="#c4b5fd" font-size="13" font-weight="600">App.java</text>
+  <text x="450" y="52" text-anchor="middle" fill="#a78bfa" font-size="10">extends Application</text>
+
+  <!-- SceneManager -->
+  <rect x="565" y="20" width="130" height="36" rx="8" fill="#1c1a2e" stroke="#f472b6" stroke-width="2"/>
+  <text x="630" y="38" text-anchor="middle" fill="#f9a8d4" font-size="12" font-weight="600">SceneManager</text>
+  <text x="630" y="52" text-anchor="middle" fill="#f472b6" font-size="10">+ FXMLLoader</text>
+
+  <!-- ===== LIFELINES ===== -->
+  <line x1="90"  y1="56" x2="90"  y2="780" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,6"/>
+  <line x1="250" y1="56" x2="250" y2="780" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,6"/>
+  <line x1="450" y1="56" x2="450" y2="780" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,6"/>
+  <line x1="630" y1="56" x2="630" y2="780" stroke="#374151" stroke-width="1.5" stroke-dasharray="6,6"/>
+
+  <!-- ===== SECTION: LAUNCH ===== -->
+  <text x="20" y="90" fill="#4b5563" font-size="10" font-weight="700" letter-spacing="1.5">LAUNCH</text>
+  <line x1="20" y1="94" x2="700" y2="94" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- 1. main() calls launch() -->
+  <line x1="90" y1="115" x2="243" y2="115" stroke="#818cf8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="165" y="109" text-anchor="middle" fill="#818cf8" font-size="11" font-weight="500">launch(args)</text>
+
+  <!-- 2. JavaFX creates Stage -->
+  <rect x="237" y="130" width="26" height="50" rx="3" fill="#1a3a1a" stroke="#4ade80" stroke-width="1"/>
+  <text x="250" y="149" text-anchor="middle" fill="#86efac" font-size="10">new</text>
+  <text x="250" y="163" text-anchor="middle" fill="#86efac" font-size="10">Stage</text>
+
+  <!-- 3. JavaFX calls start(stage) -->
+  <line x1="263" y1="155" x2="443" y2="155" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <text x="350" y="149" text-anchor="middle" fill="#4ade80" font-size="11" font-weight="500">start(stage)</text>
+  <text x="350" y="168" text-anchor="middle" fill="#6b7280" font-size="9">Stage passed as parameter</text>
+
+  <!-- ===== SECTION: START METHOD ===== -->
+  <text x="20" y="200" fill="#4b5563" font-size="10" font-weight="700" letter-spacing="1.5">START METHOD  (App.java)</text>
+  <line x1="20" y1="204" x2="700" y2="204" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- App activation box -->
+  <rect x="443" y="155" width="14" height="360" rx="2" fill="#2d2456" stroke="#a78bfa" stroke-width="1"/>
+
+  <!-- 4. new SceneManager(stage) -->
+  <line x1="450" y1="225" x2="623" y2="225" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arr-purple)"/>
+  <text x="535" y="219" text-anchor="middle" fill="#c084fc" font-size="11" font-weight="500">new SceneManager(stage)</text>
+
+  <!-- SceneManager activation -->
+  <rect x="623" y="225" width="14" height="30" rx="2" fill="#2a1a3a" stroke="#f472b6" stroke-width="1"/>
+  <!-- return sceneManager -->
+  <line x1="623" y1="240" x2="457" y2="240" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-back)"/>
+  <text x="535" y="234" text-anchor="middle" fill="#9ca3af" font-size="9">sceneManager instance</text>
+
+  <!-- 5. new FXMLLoader(...) -->
+  <rect x="443" y="265" width="14" height="30" rx="2" fill="#1e1b4b" stroke="#6366f1" stroke-width="1" opacity="0.6"/>
+  <text x="350" y="271" text-anchor="end" fill="#818cf8" font-size="11">new FXMLLoader(</text>
+  <text x="350" y="284" text-anchor="end" fill="#818cf8" font-size="11">"menu.fxml")</text>
+
+  <!-- 6. loader.load() — triggers controller creation -->
+  <line x1="450" y1="315" x2="623" y2="315" stroke="#f472b6" stroke-width="1.5" marker-end="url(#arr-pink)"/>
+  <text x="535" y="309" text-anchor="middle" fill="#f472b6" font-size="11" font-weight="500">loader.load()</text>
+
+  <!-- SceneManager / FXMLLoader activation -->
+  <rect x="623" y="315" width="14" height="80" rx="2" fill="#2a1a3a" stroke="#f472b6" stroke-width="1"/>
+
+  <!-- Internal: reads FXML, creates controller -->
+  <text x="648" y="335" fill="#6b7280" font-size="9">reads FXML</text>
+  <text x="648" y="348" fill="#6b7280" font-size="9">→ new MenuController()</text>
+  <text x="648" y="361" fill="#6b7280" font-size="9">→ injects @FXML fields</text>
+
+  <!-- Note box -->
+  <rect x="575" y="370" width="140" height="40" rx="5" fill="#1f2937" stroke="#374151" stroke-width="1"/>
+  <text x="645" y="386" text-anchor="middle" fill="#9ca3af" font-size="9">Controller created by</text>
+  <text x="645" y="398" text-anchor="middle" fill="#fbbf24" font-size="9">JavaFX, not by you!</text>
+
+  <!-- return Parent root -->
+  <line x1="623" y1="400" x2="457" y2="400" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-back)"/>
+  <text x="535" y="394" text-anchor="middle" fill="#9ca3af" font-size="9">Parent root</text>
+
+  <!-- 7. loader.getController() -->
+  <line x1="450" y1="430" x2="623" y2="430" stroke="#f472b6" stroke-width="1.5" marker-end="url(#arr-pink)"/>
+  <text x="535" y="424" text-anchor="middle" fill="#f472b6" font-size="11" font-weight="500">loader.getController()</text>
+
+  <rect x="623" y="430" width="14" height="20" rx="2" fill="#2a1a3a" stroke="#f472b6" stroke-width="1"/>
+  <line x1="623" y1="440" x2="457" y2="440" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-back)"/>
+  <text x="535" y="434" text-anchor="middle" fill="#9ca3af" font-size="9">MenuController instance</text>
+
+  <!-- 8. controller.setSceneManager() -->
+  <line x1="450" y1="468" x2="623" y2="468" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arr-purple)"/>
+  <text x="535" y="462" text-anchor="middle" fill="#c084fc" font-size="11" font-weight="500">controller.setSceneManager()</text>
+
+  <rect x="623" y="468" width="14" height="20" rx="2" fill="#2a1a3a" stroke="#f472b6" stroke-width="1"/>
+
+  <!-- 9. stage.setScene() / show() -->
+  <line x1="450" y1="500" x2="243" y2="500" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arr-back-green)"/>
+  <text x="345" y="494" text-anchor="middle" fill="#4ade80" font-size="11" font-weight="500">stage.setScene(new Scene(root))</text>
+  <line x1="450" y1="516" x2="243" y2="516" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arr-back-green)"/>
+  <text x="345" y="530" text-anchor="middle" fill="#4ade80" font-size="11" font-weight="500">stage.show()</text>
+
+  <!-- ===== SECTION: RUNTIME ===== -->
+  <text x="20" y="560" fill="#4b5563" font-size="10" font-weight="700" letter-spacing="1.5">RUNTIME  (user clicks Snake button)</text>
+  <line x1="20" y1="564" x2="700" y2="564" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- User event -->
+  <rect x="443" y="575" width="14" height="140" rx="2" fill="#2d2456" stroke="#a78bfa" stroke-width="1"/>
+
+  <text x="430" y="596" text-anchor="end" fill="#fbbf24" font-size="11">openSnake(event)</text>
+  <text x="430" y="610" text-anchor="end" fill="#6b7280" font-size="9">triggered by button click</text>
+
+  <!-- calls sceneManager.switchTo() -->
+  <line x1="457" y1="625" x2="623" y2="625" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arr-purple)"/>
+  <text x="535" y="619" text-anchor="middle" fill="#c084fc" font-size="11" font-weight="500">sceneManager.switchTo(</text>
+  <text x="535" y="632" text-anchor="middle" fill="#c084fc" font-size="11" font-weight="500">"snake.fxml")</text>
+
+  <rect x="623" y="625" width="14" height="80" rx="2" fill="#2a1a3a" stroke="#f472b6" stroke-width="1"/>
+
+  <text x="648" y="645" fill="#6b7280" font-size="9">loader.load()</text>
+  <text x="648" y="658" fill="#6b7280" font-size="9">→ new SnakeController()</text>
+  <text x="648" y="671" fill="#6b7280" font-size="9">→ setSceneManager()</text>
+  <text x="648" y="684" fill="#6b7280" font-size="9">→ stage.setScene()</text>
+
+  <!-- ===== LEGEND ===== -->
+  <line x1="20" y1="750" x2="700" y2="750" stroke="#1f2937" stroke-width="1"/>
+
+  <line x1="30" y1="768" x2="60" y2="768" stroke="#818cf8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="65" y="772" fill="#9ca3af" font-size="10">method call</text>
+
+  <line x1="160" y1="768" x2="190" y2="768" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-back)"/>
+  <text x="195" y="772" fill="#9ca3af" font-size="10">return value</text>
+
+  <rect x="310" y="762" width="10" height="12" rx="2" fill="#2d2456" stroke="#a78bfa" stroke-width="1"/>
+  <text x="325" y="772" fill="#9ca3af" font-size="10">active execution</text>
+
+  <text x="455" y="772" fill="#fbbf24" font-size="10">⚡ auto-created by JavaFX (not you)</text>
+
+</svg>
+
+<div class="legend" style="margin-top:16px; gap:20px; display:flex; flex-wrap:wrap; justify-content:center; max-width:720px; margin-left:auto; margin-right:auto;">
+  <span style="font-size:0.72rem; color:#6366f1; background:#1e1b4b; padding:4px 10px; border-radius:20px; border:1px solid #312e81;">main()</span>
+  <span style="font-size:0.72rem; color:#4ade80; background:#1a2e1a; padding:4px 10px; border-radius:20px; border:1px solid #166534;">JavaFX Runtime</span>
+  <span style="font-size:0.72rem; color:#c084fc; background:#1e1b4b; padding:4px 10px; border-radius:20px; border:1px solid #4c1d95;">App.java</span>
+  <span style="font-size:0.72rem; color:#f472b6; background:#1c1a2e; padding:4px 10px; border-radius:20px; border:1px solid #831843;">SceneManager + FXMLLoader</span>
+</div>
+
+</body>
+</html>

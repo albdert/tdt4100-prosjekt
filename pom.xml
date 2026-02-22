@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
  
     <groupId>TDT4100_project</groupId>
-    <artifactId>tdt4100_v2024_prosjekt_boilerplate</artifactId>
+    <artifactId>tdt4100_app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
  
-    <name>tdt4100_v2024_prosjekt_boilerplate</name>
+    <name>tdt4100_v26_prosjekt</name>
 	
 
    <dependencies>
@@ -51,7 +51,7 @@
 		    <artifactId>maven-compiler-plugin</artifactId>
 		    <version>3.12.1</version>
 		    <configuration>
-		        <release>21</release>
+		        <release>25</release>
 		    </configuration>
 	    </plugin>
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="app.controllers.PauseMenuController"
+      alignment="CENTER"
+      style="-fx-background-color: rgba(0,0,0,0.6);">
+
+    <Label text="PAUSED" style="-fx-text-fill: white; -fx-font-size: 32;"/>
+    <Button fx:id="resume" text="Resume" onAction="#handleButtonClick"/>
+    <Button fx:id="menu" text="Main Menu" onAction="#handleButtonClick"/>
+</VBox>

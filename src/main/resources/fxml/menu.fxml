@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="app.controllers.MainMenuController"
+            style="-fx-background-color: #0d0d0f;"
+            prefWidth="720" prefHeight="720">
+
+    <!-- TOP: Title bar -->
+    <top>
+        <VBox alignment="CENTER" style="-fx-padding: 32 0 16 0;">
+            <Label text="GAME ARCADE"
+                   style="-fx-text-fill: #ffffff;
+                          -fx-font-size: 36;
+                          -fx-font-weight: bold;
+                          -fx-letter-spacing: 8;"/>
+            <Label text="SELECT A GAME TO PLAY"
+                   style="-fx-text-fill: #555566;
+                          -fx-font-size: 11;
+                          -fx-letter-spacing: 4;"/>
+        </VBox>
+    </top>
+
+    <!-- CENTER: Game buttons -->
+    <center>
+        <HBox alignment="CENTER"
+              spacing="24"
+              style="-fx-padding: 16 40 16 40;">
+
+            <!-- Snake -->
+            <StackPane fx:id="snake"
+                       onMouseClicked="#handleButtonClick"
+                       style="-fx-background-color: #1a1a2e;
+                              -fx-background-radius: 12;
+                              -fx-border-color: #2a2a4a;
+                              -fx-border-width: 2;
+                              -fx-border-radius: 12;
+                              -fx-cursor: hand;"
+                       prefWidth="230" prefHeight="280">
+                <VBox alignment="CENTER" spacing="16" style="-fx-padding: 24;">
+
+                    <!-- Snake preview grid drawn with nested HBoxes -->
+                    <StackPane style="-fx-background-color: #0a1628;
+                                      -fx-background-radius: 8;"
+                               prefWidth="160" prefHeight="160">
+                        <VBox alignment="CENTER" spacing="3" style="-fx-padding: 16;">
+                            <!-- Row 1 -->
+                            <HBox spacing="3" alignment="CENTER">
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #4ade80; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                            </HBox>
+                            <!-- Row 2 -->
+                            <HBox spacing="3" alignment="CENTER">
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #22c55e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #ef4444; -fx-background-radius: 50;"/>
+                            </HBox>
+                            <!-- Row 3 -->
+                            <HBox spacing="3" alignment="CENTER">
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                            </HBox>
+                            <!-- Row 4 -->
+                            <HBox spacing="3" alignment="CENTER">
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                            </HBox>
+                            <!-- Row 5 -->
+                            <HBox spacing="3" alignment="CENTER">
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                            </HBox>
+                        </VBox>
+                    </StackPane>
+
+                    <VBox alignment="CENTER" spacing="4">
+                        <Label text="SNAKE"
+                               style="-fx-text-fill: #4ade80;
+                                      -fx-font-size: 15;
+                                      -fx-font-weight: bold;
+                                      -fx-letter-spacing: 3;"/>
+                        <Label text="Classic arcade"
+                               style="-fx-text-fill: #44445a;
+                                      -fx-font-size: 10;"/>
+                    </VBox>
+                </VBox>
+            </StackPane>
+
+            <!-- Tic Tac Toe -->
+            <StackPane fx:id="tictactoe"
+                       onMouseClicked="#handleButtonClick"
+                       style="-fx-background-color: #1a1a2e;
+                              -fx-background-radius: 12;
+                              -fx-border-color: #2a2a4a;
+                              -fx-border-width: 2;
+                              -fx-border-radius: 12;
+                              -fx-cursor: hand;"
+                       prefWidth="230" prefHeight="280">
+                <VBox alignment="CENTER" spacing="16" style="-fx-padding: 24;">
+
+                    <StackPane style="-fx-background-color: #0a1628;
+                                      -fx-background-radius: 8;"
+                               prefWidth="160" prefHeight="160">
+                        <VBox alignment="CENTER" spacing="0" style="-fx-padding: 16;">
+                            <!-- TTT row 1 -->
+                            <HBox spacing="0" alignment="CENTER">
+                                <Label text="X" prefWidth="44" prefHeight="44"
+                                       alignment="CENTER"
+                                       style="-fx-text-fill: #60a5fa; -fx-font-size: 22; -fx-font-weight: bold;
+                                              -fx-border-color: transparent #334155 #334155 transparent; -fx-border-width: 0 2 2 0;"/>
+                                <Label text="O" prefWidth="44" prefHeight="44"
+                                       alignment="CENTER"
+                                       style="-fx-text-fill: #f472b6; -fx-font-size: 22; -fx-font-weight: bold;
+                                              -fx-border-color: transparent #334155 #334155 #334155; -fx-border-width: 0 2 2 2;"/>
+                                <Label text="X" prefWidth="44" prefHeight="44"
+                                       alignment="CENTER"
+                                       style="-fx-text-fill: #60a5fa; -fx-font-size: 22; -fx-font-weight: bold;
+                                              -fx-border-color: transparent transparent #334155 #334155; -fx-border-width: 0 0 2 2;"/>
+                            </HBox>
+                            <!-- TTT row 2 -->
+                            <HBox spacing="0" alignment="CENTER">
+                                <Label text="O" prefWidth="44" prefHeight="44"
+                                       alignment="CENTER"
+                                       style="-fx-text-fill: #f472b6; -fx-font-size: 22; -fx-font-weight: bold;
+                                              -fx-border-color: #334155 #334155 #334155 transparent; -fx-border-width: 2 2 2 0;"/>
+                                <Label text="X" prefWidth="44" prefHeight="44"
+                                       alignment="CENTER"
+                                       style="-fx-text-fill: #60a5fa; -fx-font-size: 22; -fx-font-weight: bold;
+                                              -fx-border-color: #334155; -fx-border-width: 2;"/>
+                                <Label text=" " prefWidth="44" prefHeight="44"
+                                       alignment="CENTER"
+                                       style="-fx-border-color: #334155 transparent #334155 #334155; -fx-border-width: 2 0 2 2;"/>
+                            </HBox>
+                            <!-- TTT row 3 -->
+                            <HBox spacing="0" alignment="CENTER">
+                                <Label text=" " prefWidth="44" prefHeight="44"
+                                       alignment="CENTER"
+                                       style="-fx-border-color: #334155 #334155 transparent transparent; -fx-border-width: 2 2 0 0;"/>
+                                <Label text="O" prefWidth="44" prefHeight="44"
+                                       alignment="CENTER"
+                                       style="-fx-text-fill: #f472b6; -fx-font-size: 22; -fx-font-weight: bold;
+                                              -fx-border-color: #334155 #334155 transparent #334155; -fx-border-width: 2 2 0 2;"/>
+                                <Label text=" " prefWidth="44" prefHeight="44"
+                                       alignment="CENTER"
+                                       style="-fx-border-color: #334155 transparent transparent #334155; -fx-border-width: 2 0 0 2;"/>
+                            </HBox>
+                        </VBox>
+                    </StackPane>
+
+                    <VBox alignment="CENTER" spacing="4">
+                        <Label text="TIC TAC TOE"
+                               style="-fx-text-fill: #60a5fa;
+                                      -fx-font-size: 15;
+                                      -fx-font-weight: bold;
+                                      -fx-letter-spacing: 3;"/>
+                        <Label text="Strategy game"
+                               style="-fx-text-fill: #44445a;
+                                      -fx-font-size: 10;"/>
+                    </VBox>
+                </VBox>
+            </StackPane>
+
+            <!-- Test Game -->
+            <StackPane fx:id="test"
+                       onMouseClicked="#handleButtonClick"
+                       style="-fx-background-color: #1a1a2e;
+                              -fx-background-radius: 12;
+                              -fx-border-color: #2a2a4a;
+                              -fx-border-width: 2;
+                              -fx-border-radius: 12;
+                              -fx-cursor: hand;"
+                       prefWidth="230" prefHeight="280">
+                <VBox alignment="CENTER" spacing="16" style="-fx-padding: 24;">
+
+                    <StackPane style="-fx-background-color: #0a1628;
+                                      -fx-background-radius: 8;"
+                               prefWidth="160" prefHeight="160">
+                        <VBox alignment="CENTER" spacing="12">
+                            <Label text="?"
+                                   style="-fx-text-fill: #a78bfa;
+                                          -fx-font-size: 64;
+                                          -fx-font-weight: bold;"/>
+                        </VBox>
+                    </StackPane>
+
+                    <VBox alignment="CENTER" spacing="4">
+                        <Label text="TEST"
+                               style="-fx-text-fill: #a78bfa;
+                                      -fx-font-size: 15;
+                                      -fx-font-weight: bold;
+                                      -fx-letter-spacing: 3;"/>
+                        <Label text="Coming soon"
+                               style="-fx-text-fill: #44445a;
+                                      -fx-font-size: 10;"/>
+                    </VBox>
+                </VBox>
+            </StackPane>
+
+        </HBox>
+    </center>
+
+    <!-- BOTTOM: Settings, Credits, Quit -->
+    <bottom>
+        <HBox alignment="CENTER"
+              spacing="16"
+              style="-fx-padding: 20 40 32 40;">
+
+            <Button fx:id="settings"
+                    text="⚙  SETTINGS"
+                    onAction="#handleButtonClick"
+                    style="-fx-background-color: #1a1a2e;
+                           -fx-text-fill: #888899;
+                           -fx-font-size: 11;
+                           -fx-font-weight: bold;
+                           -fx-letter-spacing: 2;
+                           -fx-padding: 10 24;
+                           -fx-background-radius: 6;
+                           -fx-border-color: #2a2a4a;
+                           -fx-border-width: 1;
+                           -fx-border-radius: 6;
+                           -fx-cursor: hand;"/>
+
+            <Button fx:id="credits"
+                    text="★  CREDITS"
+                    onAction="#handleButtonClick"
+                    style="-fx-background-color: #1a1a2e;
+                           -fx-text-fill: #888899;
+                           -fx-font-size: 11;
+                           -fx-font-weight: bold;
+                           -fx-letter-spacing: 2;
+                           -fx-padding: 10 24;
+                           -fx-background-radius: 6;
+                           -fx-border-color: #2a2a4a;
+                           -fx-border-width: 1;
+                           -fx-border-radius: 6;
+                           -fx-cursor: hand;"/>
+
+            <Button fx:id="quit"
+                    text="✕  QUIT"
+                    onAction="#handleButtonClick"
+                    style="-fx-background-color: #2a1a1a;
+                           -fx-text-fill: #ef4444;
+                           -fx-font-size: 11;
+                           -fx-font-weight: bold;
+                           -fx-letter-spacing: 2;
+                           -fx-padding: 10 24;
+                           -fx-background-radius: 6;
+                           -fx-border-color: #4a2a2a;
+                           -fx-border-width: 1;
+                           -fx-border-radius: 6;
+                           -fx-cursor: hand;"/>
+
+        </HBox>
+    </bottom>
+
+</BorderPane>

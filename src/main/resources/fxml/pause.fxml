@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="app.controllers.PauseMenuController"
+      alignment="CENTER"
+      spacing="0"
+      style="-fx-background-color: rgba(0, 0, 0, 0.75);">
+
+    <!-- Centered pause panel -->
+    <VBox alignment="CENTER"
+          spacing="0"
+          style="-fx-background-color: #0d0d0f;
+                 -fx-background-radius: 12;
+                 -fx-border-color: #1a1a2e;
+                 -fx-border-width: 2;
+                 -fx-border-radius: 12;
+                 -fx-effect: dropshadow(gaussian, #000000cc, 32, 0.5, 0, 0);"
+          prefWidth="300" maxWidth="300">
+
+        <!-- Header -->
+        <VBox alignment="CENTER"
+              spacing="6"
+              style="-fx-padding: 32 32 28 32;
+                     -fx-border-color: transparent transparent #1a1a2e transparent;
+                     -fx-border-width: 0 0 2 0;">
+
+            <Label text="▐▐"
+                   style="-fx-text-fill: #4ade80;
+                          -fx-font-size: 28;
+                          -fx-font-weight: bold;"/>
+            <Label text="PAUSED"
+                   style="-fx-text-fill: #ffffff;
+                          -fx-font-size: 26;
+                          -fx-font-weight: bold;
+                          -fx-letter-spacing: 8;"/>
+            <Label text="GAME IS PAUSED"
+                   style="-fx-text-fill: #333344;
+                          -fx-font-size: 9;
+                          -fx-font-weight: bold;
+                          -fx-letter-spacing: 3;"/>
+        </VBox>
+
+        <!-- Buttons -->
+        <VBox alignment="CENTER"
+              spacing="12"
+              style="-fx-padding: 28 32 32 32;">
+
+            <Button fx:id="resume"
+                    text="▶   RESUME"
+                    onAction="#handleButtonClick"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #4ade80;
+                           -fx-text-fill: #0a1628;
+                           -fx-font-size: 13;
+                           -fx-font-weight: bold;
+                           -fx-letter-spacing: 3;
+                           -fx-padding: 14 24;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;"/>
+
+            <Button fx:id="mainmenu"
+                    text="⌂   MAIN MENU"
+                    onAction="#handleButtonClick"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #1a1a2e;
+                           -fx-text-fill: #888899;
+                           -fx-font-size: 13;
+                           -fx-font-weight: bold;
+                           -fx-letter-spacing: 3;
+                           -fx-padding: 14 24;
+                           -fx-background-radius: 6;
+                           -fx-border-color: #2a2a4a;
+                           -fx-border-width: 1;
+                           -fx-border-radius: 6;
+                           -fx-cursor: hand;"/>
+
+        </VBox>
+
+    </VBox>
+
+</VBox>
