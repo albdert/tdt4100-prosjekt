@@ -1,70 +1,50 @@
 # Skjelettprosjekt for TDT4100 prosjekt V2026
 
-Dette repoet er et skjelettprosjekt for TDT4100 prosjektet våren 2026.
+Generell prosjektstruktur opprettet fra [prosjekt-base](https://git.ntnu.no/tdt4100/prosjekt-base/tree/main)
 
-Vi har opprettet et eksempelprosjekt her, som er ment for at dere skal kunne komme raskt i gang med deres eget prosjekt.
+## Model-View-Controller prinsippet
+[wikipedia.com](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)
 
-## TL;DR
+Prosjektet bygger på Model-View-Controller prinsippet. 
 
-Lag en ny mappe i `src/main/java/` som er deres prosjekt. Opprett en startfil for appen, slik som [ExampleProjectApp.java](src/main/java/exampleproject/ExampleProjectApp.java) og en kontroller som [ExampleProjectController.java](src/main/java/exampleproject/ExampleProjectController.java) i denne nye mappen. Lag så en mappe i `src/main/resources/` med samme navn som prosjektet deres og et view som [App.fxml](src/main/resources/exampleproject/App.fxml) i denne nye mappen.
-
-**Eventuelt**: Endre navn på filer og mapper fra "ExampleProject" til deres prosjektnavn.
-
-## Litt rask info
-
-Allerede nå er det mulig å kjøre filen [ExampleProjectApp.java](src/main/java/exampleproject/ExampleProjectApp.java) i VS Code for å få opp en liten kalkulator-app.
-
-Denne filen er "startfilen" til applikasjonen. Her settes tittel på appen, hvilken FXML-fil som skal brukes, og den er ansvarlig for å starte selve applikasjonen:
-
-```java
-primaryStage.setTitle("Example App"); // Setter tittel på vinduet
-primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("App.fxml")))); // Sier at appen skal bruke "App.fxml"
-primaryStage.show(); // Viser vinduet
+Hensikten er å dele opp programmet
+slik at `modellen` representerer intern informasjon om appens tilstand, `view` representerer
+brukergrensesnittet, og `controller` håndterer koblingen mellom bruker, `model` og `view`.
 ```
-
-Kontrolleren til applikasjonen er [ExampleProjectController.java](src/main/java/exampleproject/ExampleProjectController.java). Denne filen er "bindeleddet" mellom FXML-filen(e) og klassen(e) som skal brukes i applikasjonen. I dette eksempelprosjektet har den to metoder: `initCalculator` og `handleButtonClick`. I tillegg har den noen felter som er annotert med `@FXML`. Dette viser at de tilhører [FXML-filen](src/main/resources/exampleproject/App.fxml) vår. Her er navnet på variablene viktige. F.eks er `private Label result` på linje 12 bundet til `Label`-feltet på linje 15 i [FXML-filen](src/main/resources/exampleproject/App.fxml), siden denne har en `fx:id="result"` og variabelen vår heter `result`:
-
-```java
-@FXML
-private Label result; // Fra ExampleProjectApp.java
-
-<Label fx:id="result" layoutX="257.0" layoutY="244.0" /> // Fra App.fxml
+┌─────────┐   updates   ┌───────────┐   reads/draws    ┌──────┐
+│  Model  │ ◄────────── │Controller │ ───────────────► │ View │
+│ (Java)  │             │  (Java)   │                  │(FXML)│
+└─────────┘             └───────────┘                  └──────┘
+                              ▲
+                        user interaction
 ```
+## JavaFX
+[JavaFX docs](https://docs.oracle.com/javase/8/javase-clienttechnologies.htm)
 
-Noe liknende skjer med metoden `handleButtonClick`, som også er annotert med `@FXML`. Dette gjøres slik at vi "får tak i" denne metoden fra [FXML-filen](src/main/resources/exampleproject/App.fxml). `Button`-feltet i [FXML-filen](src/main/resources/exampleproject/App.fxml) har en `onAction="#handleButtonClick"`, som vil si at metoden `handleButtonClick`, som er annotert med `@FXML`, blir kjørt når vi trykker på knappen:
+[JavaFX Architecture](https://docs.oracle.com/javase/8/javafx/get-started-tutorial/jfx-architecture.htm#CHDFDAFF)
 
-```xml
-<Button layoutX="271.0" layoutY="188.0" mnemonicParsing="false" onAction="#handleButtonClick" text="Kalkuler" /> <!-- Fra App.fxml -->
-```
+[JavaFX Fundamentals](https://dev.java/learn/javafx/)
 
-Det som gjør at [kontrolleren](src/main/java/exampleproject/ExampleProjectController.java) og [FXML-filen](src/main/resources/exampleproject/App.fxml) er koblet sammen er attributten `fx:controller='exampleproject.ExampleProjectController'` på det aller ytterste elementet i [FXML-filen](src/main/resources/exampleproject/App.fxml).
+##### Generell struktur for et JavaFX prosjekt:
 
-```xml
-<AnchorPane fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exampleproject.ExampleProjectController"> <!-- Fra App.fxml -->
-```
+"JavaFX uses a theater metaphor: the top-level container is the _Stage_ and is constructed by the platform for you. In desktop applications, the Stage is the window. Its appearance depends on the host system and varies among Mac OS X, Windows, and Linux platforms. 
 
-Så, når vi trykker på knappen i appen blir som sagt metoden `handleButtonClick` kjørt. Det som skjer inne i denne metoden er først at vi oppretter en ny [kalkulator](src/main/java/exampleproject/Calculator.java). Ved opprettelse av en kalkulator trenger vi en `operator`. Denne henter vi ut fra hva en bruker av appen har skrevet inn i `TextField`-feltet med `fx:id="operator"`. Siden vi allerede har opprettet en variabel `private TextField operator`, som er annotert med `@FXML`, er denne allerede linket til dette `TextField`-feltet, og vi kan hente ut teksten som er skrevet inn med `operator.getText()`.
+The _Stage_ holds a _scene_. The _scene_ consists of JavaFX elements such as the root, which is the top _scene_ element and contains what is called the scene graph.
 
-```java
-initCalculator(operator.getText()); // Kaller på initCalculator som oppretter en ny kalkulator. Operator.getText() henter ut teksten som er skrevet inn i `operator`-feltet.
-```
+The scene graph is a strictly hierarchical structure of elements that visualize your application. These elements are called Nodes. A Node has exactly one parent (except the root node) and may contain other Nodes. Or, a Node can be a leaf node with no children. Nodes must be added to the scene graph in order to participate in the rendering of that scene. Furthermore, a Node may be added only once to a scene, unless it is first removed and then added somewhere else.
 
-Det samme gjelder nedover i metoden; vi henter ut verdier fra `firstNumber` og `secondNumber`. Det som er verdt å merke seg her er at de blir hentet ut som `String`s, men kalkulatoren vår krever `int`s. Derfor gjør vi de også om til integers. Her bør man og være litt forsiktige, da det ikke er gitt at brukere skriver inn gyldige tall. Derfor har vi wrappet dette inn i en `try/catch`, som sier ifra dersom tallet er ugyldig.
+Parent nodes in general manage their children by arranging them within the scene according to layout rules and any constraints you configure. JavaFX uses a two-dimensional coordinate system for 2D graphics with the origin at the upper-left corner of the scene, as shown in the figure below. Coordinate values on the x-axis increase to the right, and y-axis values increase as you move down the scene."
 
-I tillegg til alt dette er det laget en liten [eksempel-testfil](src/test/java/exampleproject/CalculatorTest.java). Ingenting spennende som skjer her - det er en test for konstruktøren til [kalkulator-klassen vår](src/main/java/exampleproject/Calculator.java), samt en test for metoden `calculate` som den har. Alle tester dere skriver til klassene deres legges altså inn i mappen `src/test/java/<deres_prosjekt>/`.
+##### JavaFX FXML
+ "An alternative approach is to declare scene graph nodes with FXML, a markup notation based on XML. FXML lets you describe and configure your scene graph in a declarative format. This approach has several advantages:
 
-## For å komme i gang med deres eget prosjekt
+- FXML markup structure is hierarchical, so it reflects the structure of your scene graph.
+- FXML describes your view and supports a Model-View-Controller (MVC) architecture, providing better structure for larger applications.
+- FXML reduces the JavaFX code you have to write to create and configure scene graph nodes.
+- You can design your UI with Scene Builder. This drag-and-drop tool is a stand-alone application that provides a visual rendering of your scene. And Scene Builder generates the FXML markup for you.
+- You can also edit your FXML markup with text and IDE editors.
 
-1. Lag et eget repo (repository) via templaten på [GitHub](https://git.ntnu.no/tdt4100/prosjekt-base/). En mer detaljert oppskrift på dette finner dere på Blackboard under Prosjekt->FAQ.
-2. Inviter gruppemedlemmene dine til dette repoet, og gi de minst en `Developer`-rolle (helst `Maintain`, men `Admin` funker også). Dette kan gjøres under Settings->Collaborators and teams->Add people.
-3. Klon prosjektet et sted på maskinen deres.
-4. Lag en ny mappe i `src/main/java/` som er deres prosjekt.
-5. Opprett en startfil for appen deres, slik som [ExampleProjectApp.java](src/main/java/exampleproject/ExampleProjectApp.java) og en kontroller som [ExampleProjectController.java](src/main/java/exampleproject/ExampleProjectController.java) i deres nye prosjektmappe.
-6. Opprett en ny mappe i `src/main/resources/` som er deres prosjekt.
-7. Opprett en FXML-fil, slik som [App.fxml](src/main/resources/exampleproject/App.fxml) i deres nye prosjektmappe i `src/main/resources/`.
-8. **HUSK** å legge inn `fx:controller='<deres_prosjekt>.<deres_kontroller>'` på det aller ytterste elementet i den nye FXML-filen deres, ellers vil ikke appen starte.
-
-**Eventuelt**: Endre navn på filer og mapper fra "ExampleProject" til deres prosjektnavn.
+FXML affects the structure of your program. The main application class now invokes an FXMLLoader. This loader parses your FXML markup, creates JavaFX objects, and inserts the scene graph into the scene at the root node. You can have multiple FXML files, and typically each one has a corresponding JavaFX controller class. This controller class may include event handlers or other statements that dynamically update the scene. The controller also includes business logic that manages a specific view."
 
 ## Reminder av nøkkelpunkter
 
