@@ -1,4 +1,4 @@
-# Skjelettprosjekt for TDT4100 prosjekt V2026
+# Prosjekt TDT4100 v2026
 
 Generell prosjektstruktur opprettet fra [prosjekt-base](https://git.ntnu.no/tdt4100/prosjekt-base/tree/main)
 
