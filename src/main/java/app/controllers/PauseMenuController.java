@@ -2,8 +2,8 @@ package app.controllers;
 
 import java.io.IOException;
 
-import app.Paths;
 import app.SceneManager;
+import app.common.Paths;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

@@ -1,17 +1,16 @@
-package app.snake;
+package wolf.controllers;
 
-import app.controllers.SnakeController;
 import javafx.animation.AnimationTimer;
 
-public class SnakeLoop extends AnimationTimer{
-    private final SnakeController c;
+public class WolfLoop extends AnimationTimer {
+    private final WolfController c;
     private long updateTime;
     private long updateInterval;
 
-    public SnakeLoop(SnakeController c) {
+    public WolfLoop(WolfController c) {
         this.c = c;
         updateTime = 0;
-        updateInterval = 500_000_000;
+        updateInterval = 50_000_000;
     }
 
     @Override
@@ -21,6 +20,4 @@ public class SnakeLoop extends AnimationTimer{
             updateTime = now;
         }
     }
-    
-
 }

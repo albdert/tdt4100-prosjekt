@@ -1,4 +1,4 @@
-package app.snake;
+package snake.model;
 
 public class Player {
     private enum Dir {

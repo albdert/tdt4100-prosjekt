@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="wolf.controllers.WolfController"
+           fx:id="root"
+           style="-fx-background-color: #0d0d0f;">
+<BorderPane>
+
+    <!-- CENTER: Canvas with glowing border -->
+    <center>
+        <StackPane style="-fx-padding: 16 16 0 16;">
+
+            <!-- Glow border layer -->
+            <StackPane style="-fx-background-color: #4aaade;
+                              -fx-effect: dropshadow(gaussian, #4aaade80, 14, 0, 0, 0);">
+                <!-- Dark inset -->
+                <StackPane style="-fx-background-color: #060810;
+                                  -fx-padding: 2;">
+                    <Canvas fx:id="canvas" width="640" height="480"/>
+                </StackPane>
+            </StackPane>
+
+        </StackPane>
+    </center>
+
+    <!-- BOTTOM: Game UI bar -->
+    <bottom>
+        <BorderPane style="-fx-background-color: #07090f;
+                           -fx-padding: 12 16 12 16;
+                           -fx-border-color: #4aaade transparent transparent transparent;
+                           -fx-border-width: 1 0 0 0;
+                           -fx-effect: dropshadow(gaussian, #4aaade40, 10, 0, 0, -2);">
+
+            <!-- LEFT: Health + Armor -->
+            <left>
+                <HBox spacing="24" alignment="CENTER_LEFT">
+
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label text="HEALTH"
+                               style="-fx-text-fill: #2a3a4a;
+                                      -fx-font-size: 8;
+                                      -fx-font-weight: bold;
+                                      -fx-letter-spacing: 2;"/>
+                        <Label fx:id="healthLabel" text="100%"
+                               style="-fx-text-fill: #4ade80;
+                                      -fx-font-size: 26;
+                                      -fx-font-weight: bold;"/>
+                    </VBox>
+
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label text="ARMOR"
+                               style="-fx-text-fill: #2a3a4a;
+                                      -fx-font-size: 8;
+                                      -fx-font-weight: bold;
+                                      -fx-letter-spacing: 2;"/>
+                        <Label fx:id="armorLabel" text="050%"
+                               style="-fx-text-fill: #60a5fa;
+                                      -fx-font-size: 26;
+                                      -fx-font-weight: bold;"/>
+                    </VBox>
+
+                </HBox>
+            </left>
+
+            <!-- CENTER: Face / Score -->
+            <center>
+                <VBox alignment="CENTER" spacing="2">
+                    <Label text="SCORE"
+                           style="-fx-text-fill: #2a3a4a;
+                                  -fx-font-size: 8;
+                                  -fx-font-weight: bold;
+                                  -fx-letter-spacing: 2;"/>
+                    <Label fx:id="scoreLabel" text="000000"
+                           style="-fx-text-fill: #ffffff;
+                                  -fx-font-size: 26;
+                                  -fx-font-weight: bold;"/>
+                </VBox>
+            </center>
+
+            <!-- RIGHT: Ammo + Weapon -->
+            <right>
+                <HBox spacing="24" alignment="CENTER_RIGHT">
+
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label text="AMMO"
+                               style="-fx-text-fill: #2a3a4a;
+                                      -fx-font-size: 8;
+                                      -fx-font-weight: bold;
+                                      -fx-letter-spacing: 2;"/>
+                        <Label fx:id="ammoLabel" text="099"
+                               style="-fx-text-fill: #facc15;
+                                      -fx-font-size: 26;
+                                      -fx-font-weight: bold;"/>
+                    </VBox>
+
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label text="WEAPON"
+                               style="-fx-text-fill: #2a3a4a;
+                                      -fx-font-size: 8;
+                                      -fx-font-weight: bold;
+                                      -fx-letter-spacing: 2;"/>
+                        <Label fx:id="weaponLabel" text="PISTOL"
+                               style="-fx-text-fill: #888899;
+                                      -fx-font-size: 26;
+                                      -fx-font-weight: bold;"/>
+                    </VBox>
+
+                </HBox>
+            </right>
+
+        </BorderPane>
+    </bottom>
+
+</BorderPane>
+</StackPane>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
 
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
@@ -13,6 +14,7 @@
            prefWidth="720" prefHeight="720"
            style="-fx-background-color: #0d0d0f;">
 
+    <!-- Main layout inside the StackPane -->
     <BorderPane prefWidth="720" prefHeight="720">
 
         <!-- TOP: Header with title and score -->
@@ -22,14 +24,20 @@
                          -fx-border-color: transparent transparent #1a1a2e transparent;
                          -fx-border-width: 0 0 2 0;">
 
-                <HBox HBox.hgrow="ALWAYS" alignment="CENTER">
-                    <Label text="SNAKE"
-                           style="-fx-text-fill: #ffffff;
-                                  -fx-font-size: 22;
-                                  -fx-font-weight: bold;
-                                  -fx-letter-spacing: 6;"/>
+                <HBox alignment="CENTER_LEFT" spacing="0">
+                    <!-- Center: title -->
+                    <HBox HBox.hgrow="ALWAYS" alignment="CENTER">
+                        <Label text="SNAKE"
+                               style="-fx-text-fill: #ffffff;
+                                      -fx-font-size: 22;
+                                      -fx-font-weight: bold;
+                                      -fx-letter-spacing: 6;"/>
+                    </HBox>
+
+                 
                 </HBox>
 
+                <!-- Score row -->
                 <HBox alignment="CENTER" spacing="48" style="-fx-padding: 8 0 0 0;">
 
                     <VBox alignment="CENTER" spacing="2">
@@ -38,7 +46,8 @@
                                       -fx-font-size: 9;
                                       -fx-font-weight: bold;
                                       -fx-letter-spacing: 2;"/>
-                        <Label fx:id="scoreLabel" text="0"
+                        <Label fx:id="scoreLabel"
+                               text="0"
                                style="-fx-text-fill: #4ade80;
                                       -fx-font-size: 28;
                                       -fx-font-weight: bold;"/>
@@ -50,7 +59,8 @@
                                       -fx-font-size: 9;
                                       -fx-font-weight: bold;
                                       -fx-letter-spacing: 2;"/>
-                        <Label fx:id="highScoreLabel" text="0"
+                        <Label fx:id="highScoreLabel"
+                               text="0"
                                style="-fx-text-fill: #888899;
                                       -fx-font-size: 28;
                                       -fx-font-weight: bold;"/>
@@ -62,7 +72,8 @@
                                       -fx-font-size: 9;
                                       -fx-font-weight: bold;
                                       -fx-letter-spacing: 2;"/>
-                        <Label fx:id="levelLabel" text="1"
+                        <Label fx:id="levelLabel"
+                               text="1"
                                style="-fx-text-fill: #60a5fa;
                                       -fx-font-size: 28;
                                       -fx-font-weight: bold;"/>
@@ -72,7 +83,7 @@
             </VBox>
         </top>
 
-        <!-- CENTER: Canvas with glow border -->
+        <!-- CENTER: Game grid with border and padding -->
         <center>
             <StackPane style="-fx-padding: 20 43 35 43;">
 
@@ -86,7 +97,10 @@
                                       -fx-background-radius: 3;
                                       -fx-padding: 2;">
 
-                        <Canvas fx:id="canvas" width="462" height="462"/>
+                        <!-- The game grid — controller fills this with cells -->
+                        <GridPane fx:id="grid"
+                                  hgap="1" vgap="1"
+                                  style="-fx-background-color: #0a1628;"/>
 
                     </StackPane>
                 </StackPane>

@@ -2,8 +2,8 @@ package app.controllers;
 
 import java.io.IOException;
 
-import app.Paths;
 import app.SceneManager;
+import app.common.Paths;
 import javafx.application.Platform;
 
 import javafx.fxml.FXML;

@@ -2,9 +2,8 @@ package app.controllers;
 
 import java.io.IOException;
 
-import app.Paths;
 import app.SceneManager;
-
+import app.common.Paths;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -18,7 +17,7 @@ public class MainMenuController {
 
         switch (id) {
             case "snake"     -> {launchGame(Paths.SNAKE);}
-            case "tictactoe" -> {launchGame(Paths.TEST);}
+            case "tictactoe" -> {launchGame(Paths.TICTACTOE);}
             case "test"      -> {launchGame(Paths.TEST);}
             case "settings"  -> {debug();}
             case "credits"   -> {}

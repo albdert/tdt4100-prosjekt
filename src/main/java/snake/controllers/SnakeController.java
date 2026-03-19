@@ -1,26 +1,24 @@
-package app.controllers;
+package snake.controllers;
 
 import app.SceneManager;
-import app.snake.Player;
-import app.snake.SnakeLoop;
-
+import app.controllers.GameController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import snake.model.Grid;
+import snake.model.Player;
+import snake.view.SnakeRenderer;
 
 public class SnakeController extends GameController {
-    private static final int ROWS = 30;
-    private static final int COLS = 22;
-
-    @FXML
-    private GridPane grid;
-    private Rectangle[][] cells = new Rectangle[ROWS][COLS];
+    @FXML private Canvas canvas;
+    private GraphicsContext gc;
 
     private Player player;
+    private Grid grid;
     private SnakeLoop loop;
+    private SnakeRenderer renderer;
 
     @Override
     protected void handleInput(KeyCode key) {
@@ -34,7 +32,6 @@ public class SnakeController extends GameController {
             case ESCAPE -> {togglePauseMenu();}
         }
     }
-    @FXML
 
     // TODO: fjerne denne funksjonen når den ikke trengs
     private void debug() {
@@ -47,22 +44,19 @@ public class SnakeController extends GameController {
 
     @Override
     protected void initGame() {
-        initGrid();
-        player = new Player();
-        loop = new SnakeLoop(this);
-        loop.start();
-    }
+        gc = canvas.getGraphicsContext2D();
 
-    public void update() {
-        move();
-        checkCollision();
-        render();
+        renderer = new SnakeRenderer();
+        player = new Player();
+        grid = new Grid();
+
+        loop = new SnakeLoop(player, grid, renderer);
+        loop.start();
     }
 
     @Override
     protected void pauseGame() {
         // TODO: rydde opp i denne funksjonen
-        //throw new UnsupportedOperationException("Unimplemented method 'pauseGame'");
         System.out.println("\n\nPaused game\n\n");
         loop.stop();
     }
@@ -70,29 +64,7 @@ public class SnakeController extends GameController {
     @Override
     protected void resumeGame() {
         // TODO: rydde opp i denne funksjonen
-        //throw new UnsupportedOperationException("Unimplemented method 'resumeGame'");
         System.out.println("\n\nUn-paused game\n\n");
         loop.start();
-    }
-
-    private void initGrid() {
-        for (int i=0; i<ROWS; i++) {
-            for (int j = 0; j<COLS; j++) {
-                Rectangle cell = new Rectangle(20, 20);
-                //cell.setFill(Color.DARKGRAY);
-                grid.add(cell, i, j);
-                cells[i][j] = cell;
-            }
-        }
-    }
-
-    private void move() {
-        player.move();
-    }
-    private void checkCollision() {
-
-    }
-    private void render() {
-        cells[player.getx()][player.gety()].setFill(Color.RED);
     }
 } 
