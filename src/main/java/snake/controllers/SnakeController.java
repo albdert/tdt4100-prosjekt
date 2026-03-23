@@ -63,7 +63,7 @@ public class SnakeController extends GameController {
         grid = new Grid();
         food = new Food(grid.ROWS, grid.COLS);
 
-        loop = new SnakeLoop(renderer, snake, food, this);
+        loop = new SnakeLoop(renderer, snake, food);
         loop.setOnScoreChanged(score -> scoreLabel.setText(String.valueOf(score)));
         loop.setOnLevelChanged(level -> levelLabel.setText(String.valueOf(level)));
         loop.setOnGameOver(() -> Platform.runLater(() -> gameOver()));

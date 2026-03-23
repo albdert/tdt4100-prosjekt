@@ -2,14 +2,12 @@ package snake.controllers;
 
 import java.util.function.Consumer;
 
-import app.controllers.GameController;
 import javafx.animation.AnimationTimer;
 import snake.model.Food;
 import snake.model.Snake;
 import snake.view.SnakeRenderer;
 
 public class SnakeLoop extends AnimationTimer{
-    private final GameController controller;
     private final SnakeRenderer renderer;
     private final Snake snake;
     private final Food food;
@@ -25,11 +23,10 @@ public class SnakeLoop extends AnimationTimer{
     private int score = 0;
     private int eaten = 0; 
 
-    public SnakeLoop(SnakeRenderer r, Snake s, Food f, GameController c) {
+    public SnakeLoop(SnakeRenderer r, Snake s, Food f) {
         updateTime = 0;
         updateInterval = 250_000_000;
 
-        controller = c;
         renderer = r;
         snake = s;
         food = f;
