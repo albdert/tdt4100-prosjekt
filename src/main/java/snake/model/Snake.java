@@ -10,13 +10,14 @@ public class Snake {
         RIGHT
     }
 
-    private Dir dir;
     private Vector2di[] segments;
-    private int len;
+    private int len = 0;
+
+    private Dir dir = Dir.UP;
+    private boolean dirChanged = false;
+    private boolean dead = false;
 
     public Snake() {
-        len = 0;
-        dir = Dir.UP;
         segments = new Vector2di[50];
         for (int i=0; i<5; i++) {
             segments[i] = new Vector2di((17/2), (15/2)+i);
@@ -24,29 +25,29 @@ public class Snake {
         }
     }
 
-    public Vector2di getHeadPos() {
-        return segments[0];
-    }
-
-    public void changeDir(Dir d) {
-        dir = d;
+    public int size() {
+        return len;
     }
 
     public Vector2di[] getSegments() {
         return segments;
     }
 
-    public boolean posInSnake(Vector2di v) {
-        for (int i=0; i<len; i++) {
-            if (segments[i].equals(v)) {
-                return true;
-            }
+    public boolean posInSnake(Vector2di v, int start) {
+        for (int i=start; i<len; i++) {
+            if (segments[i].equals(v)) { return true; }
         }
         return false;
     }
 
-    public int size() {
-        return len;
+    public void changeDir(Dir d) {
+        if (dirChanged) { return; }
+        if (dir==Dir.UP && d==Dir.DOWN) { return; }
+        if (dir==Dir.DOWN && d==Dir.UP) { return; }
+        if (dir==Dir.LEFT && d==Dir.RIGHT) { return; }
+        if (dir==Dir.RIGHT && d==Dir.LEFT) { return; }
+        dir = d;
+        dirChanged = true;
     }
 
     public void move() {
@@ -59,14 +60,12 @@ public class Snake {
             case LEFT -> segments[0].x-=1;
             case RIGHT-> segments[0].x+=1;
         }
-
-        /* 
-        if (warp) {
-            if (snake->segments[0].y<0) { snake->segments[0].y=SIZE*(COLS-1); }
-            if (snake->segments[0].y>=SCREEN_H) { snake->segments[0].y=0; }
-            if (snake->segments[0].x<0) { snake->segments[0].x=SIZE*(ROWS-1); }
-            if (snake->segments[0].x>=SCREEN_W) { snake->segments[0].x=0; }
-        }*/
+        if (checkCollision()) {
+            segments[0].x = prevx;
+            segments[0].y = prevy;
+            dead = true;
+            return;
+        }
 
         for (int i=1; i<len; i++) {
             int newx = segments[i].x;
@@ -76,6 +75,8 @@ public class Snake {
             prevx = newx;
             prevy = newy;
         }
+
+        dirChanged = false;
     }
 
     public void extend() {
@@ -104,4 +105,19 @@ public class Snake {
         segments[len] = newSegment;
         len++;
     }
+    
+    public boolean isOnFood(Food food) {
+        if (segments[0].equals(food.getPos())) { return true; }
+        return false;
+    }
+
+    public boolean checkCollision() {
+        Vector2di head = segments[0];
+        if (posInSnake(head, 1)) { return true; };
+        if (head.x==-1 || head.x==Grid.ROWS) { return true;};
+        if (head.y==-1 || head.y==Grid.COLS) { return true;};
+
+        return false;
+    }
+    public boolean isDead() { return dead; }
 }

@@ -43,6 +43,7 @@ public class SceneManager {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Scene scene = new Scene(loader.load());
+            scene.setUserData(fxmlPath);
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

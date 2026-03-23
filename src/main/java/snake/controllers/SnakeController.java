@@ -2,11 +2,12 @@ package snake.controllers;
 
 import app.SceneManager;
 import app.controllers.GameController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import snake.model.Food;
 import snake.model.Grid;
@@ -17,6 +18,10 @@ import snake.view.SnakeRenderer;
 public class SnakeController extends GameController {
     @FXML private Canvas canvas;
     private GraphicsContext gc;
+
+    @FXML private Label scoreLabel;
+    @FXML private Label highScoreLabel;
+    @FXML private Label levelLabel;
 
     private Grid grid;
     private Snake snake;
@@ -58,7 +63,10 @@ public class SnakeController extends GameController {
         grid = new Grid();
         food = new Food(grid.ROWS, grid.COLS);
 
-        loop = new SnakeLoop(renderer, grid, snake, food);
+        loop = new SnakeLoop(renderer, snake, food, this);
+        loop.setOnScoreChanged(score -> scoreLabel.setText(String.valueOf(score)));
+        loop.setOnLevelChanged(level -> levelLabel.setText(String.valueOf(level)));
+        loop.setOnGameOver(() -> Platform.runLater(() -> gameOver()));
         loop.start();
     }
 

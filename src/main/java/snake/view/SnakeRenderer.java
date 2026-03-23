@@ -24,21 +24,15 @@ public class SnakeRenderer {
         gc.fillRect(0, 0, w, h);
     }
 
-    public void renderGrid(Grid g) {
+    public void renderGrid() {
         gc.setFill(Color.LIGHTSEAGREEN);
         for (int i=0; i<Grid.ROWS; i++) {
             for (int j=0; j<Grid.COLS; j++) {
-                /* 
-                if ((i+j)%2==0) {
-                    gc.setFill(Color.LIGHTSEAGREEN);
-                } else {
-                    gc.setFill(Color.LIGHTGREEN);
-                }*/
                 gc.setFill((i+j)%2==0 ? Color.LIGHTSEAGREEN : Color.LIGHTGREEN);
                 gc.fillRect(i*size, j*size, size, size);
             }
         }
-    };
+    }
 
     public void renderSnake(Snake p) {
         Vector2di[] segments = p.getSegments();
@@ -48,11 +42,11 @@ public class SnakeRenderer {
         for (int i=1; i<p.size(); i++) {
             gc.fillRoundRect(segments[i].x*size, segments[i].y*size, size, size, 15, 15);
         }
-    };
+    }
 
     public void renderFood(Food f) {
         Vector2di pos = f.getPos();
         gc.setFill(Color.RED);
         gc.fillOval(pos.x*size, pos.y*size, size, size);
-    };
+    }
 }

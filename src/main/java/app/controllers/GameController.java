@@ -20,6 +20,9 @@ public abstract class GameController {
     private VBox pauseMenu;
     protected boolean isPaused = false;
 
+    private VBox gameOverScreen;
+    protected boolean gameover = false;
+
     protected final Set<KeyCode> activeKeys = new HashSet<>();
 
     /**
@@ -42,6 +45,7 @@ public abstract class GameController {
         });
 
         initPauseMenu();
+        initGameOverScreen();
         initGame();
     }
 
@@ -69,6 +73,25 @@ public abstract class GameController {
             pauseMenu = loader.load();
             PauseMenuController pc = loader.getController();
             pc.setGameController(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void gameOver() {
+        root.getChildren().add(gameOverScreen);
+        pauseGame();
+    }
+
+    /**
+     * Laster inn GameOver FXML fil.
+     */
+    private void initGameOverScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.GAMEOVER));
+            gameOverScreen = loader.load();
+            GameOverController goc = loader.getController();
+            goc.setGameController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
