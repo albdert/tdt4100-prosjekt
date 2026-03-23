@@ -1,6 +1,8 @@
 package app.controllers;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import app.SceneManager;
 import app.common.Paths;
@@ -13,11 +15,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public abstract class GameController {
-    @FXML
-    protected StackPane root;
+    @FXML protected StackPane root;
 
     private VBox pauseMenu;
     protected boolean isPaused = false;
+
+    protected final Set<KeyCode> activeKeys = new HashSet<>();
 
     /**
      * Initialize metode for GameController klasser.
@@ -29,8 +32,13 @@ public abstract class GameController {
     @FXML
     private void initialize() {
         Platform.runLater(() -> {
+            SceneManager.getInstance().getStage().getScene().setOnKeyPressed(e -> {
+                    activeKeys.add(e.getCode());
+                    handleInput(e.getCode());
+            });
+
             SceneManager.getInstance().getStage().getScene()
-                .setOnKeyPressed(e -> handleInput(e.getCode()));
+                .setOnKeyReleased(e -> activeKeys.remove(e.getCode()));
         });
 
         initPauseMenu();

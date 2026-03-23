@@ -1,24 +1,28 @@
 package snake.controllers;
 
+import app.common.Vector2di;
 import javafx.animation.AnimationTimer;
+import snake.model.Food;
 import snake.model.Grid;
-import snake.model.Player;
+import snake.model.Snake;
 import snake.view.SnakeRenderer;
 
 public class SnakeLoop extends AnimationTimer{
     private final SnakeRenderer renderer;
-    private final Player player;
     private final Grid grid;
+    private final Snake snake;
+    private final Food food;
 
     private long updateTime;
     private long updateInterval;
 
-    public SnakeLoop(Player p, Grid g, SnakeRenderer r) {
+    public SnakeLoop(SnakeRenderer r, Grid g, Snake s, Food f) {
         updateTime = 0;
         updateInterval = 250_000_000;
 
         renderer = r;
-        player = p;
+        snake = s;
+        food = f;
         grid = g;
     }
 
@@ -30,20 +34,30 @@ public class SnakeLoop extends AnimationTimer{
         }
     }
 
-    private void move() {
-        player.move();
-    }
     private void checkCollision() {
 
     }
+
+    private void checkFood() {
+        if (snake.getHeadPos().equals(food.getPos())) {
+            snake.extend();
+            do {
+                food.nextPos();
+            } while (snake.posInSnake(food.getPos()));
+        }
+    }
+
     private void render() {
-        //cells[player.getx()][player.gety()].setFill(Color.RED);
-        renderer.render(grid);
+        renderer.clear();
+        renderer.renderGrid(grid);
+        renderer.renderSnake(snake);
+        renderer.renderFood(food);
     }
     
     public void update() {
-        //move();
-        //checkCollision();
-        //render();
+        snake.move();
+        checkCollision();
+        checkFood();
+        render();
     }
 }

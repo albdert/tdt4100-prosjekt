@@ -6,4 +6,10 @@ public class Vector2di {
         this.x = x;
         this.y = y;
     }
+
+    public boolean equals(Vector2di v) {
+        if (x==v.x && y==v.y) {
+            return true;
+        }   return false;
+    }
 }

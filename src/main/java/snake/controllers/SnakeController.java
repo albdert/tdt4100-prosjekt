@@ -6,28 +6,33 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import snake.model.Food;
 import snake.model.Grid;
-import snake.model.Player;
+import snake.model.Snake;
+import snake.model.Snake.Dir;
 import snake.view.SnakeRenderer;
 
 public class SnakeController extends GameController {
     @FXML private Canvas canvas;
     private GraphicsContext gc;
 
-    private Player player;
     private Grid grid;
+    private Snake snake;
+    private Food food;
     private SnakeLoop loop;
     private SnakeRenderer renderer;
 
     @Override
     protected void handleInput(KeyCode key) {
         switch (key) {
-            case UP,W    -> {player.up();}
-            case DOWN,S  -> {player.down();}
-            case LEFT,A  -> {player.left();}
-            case RIGHT,D -> {player.right();}
-            case SPACE -> {debug();}
+            case UP,W    -> {snake.changeDir(Dir.UP);}
+            case DOWN,S  -> {snake.changeDir(Dir.DOWN);}
+            case LEFT,A  -> {snake.changeDir(Dir.LEFT);}
+            case RIGHT,D -> {snake.changeDir(Dir.RIGHT);}
+            //case SPACE -> {debug();}
+            case SPACE -> {snake.extend();}
 
             case ESCAPE -> {togglePauseMenu();}
         }
@@ -44,13 +49,16 @@ public class SnakeController extends GameController {
 
     @Override
     protected void initGame() {
+        double w = canvas.getWidth();
+        double h = canvas.getHeight();
         gc = canvas.getGraphicsContext2D();
 
-        renderer = new SnakeRenderer();
-        player = new Player();
+        renderer = new SnakeRenderer(gc, w, h);
+        snake = new Snake();
         grid = new Grid();
+        food = new Food(grid.ROWS, grid.COLS);
 
-        loop = new SnakeLoop(player, grid, renderer);
+        loop = new SnakeLoop(renderer, grid, snake, food);
         loop.start();
     }
 

@@ -5,6 +5,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.Group?>
 
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
@@ -72,25 +74,26 @@
             </VBox>
         </top>
 
-        <!-- CENTER: Canvas with glow border -->
+        <!-- CENTER: Canvas with glow border — sized for 15x17 grid @ 30px/cell -->
         <center>
-            <StackPane style="-fx-padding: 20 43 35 43;">
+              <StackPane alignment="CENTER">
 
-                <!-- Outer glow border -->
-                <StackPane style="-fx-background-color: #4aaade;
-                                  -fx-background-radius: 4;
-                                  -fx-effect: dropshadow(gaussian, #4aaade80, 18, 0.3, 0, 0);">
+                  <!-- Group never resizes, always wraps children exactly -->
+                  <Group>
 
-                    <!-- Inner background -->
-                    <StackPane style="-fx-background-color: #0a1628;
-                                      -fx-background-radius: 3;
-                                      -fx-padding: 2;">
+                      <!-- Glow border: canvas size + 4px (2px border each side) -->
+                      <javafx.scene.layout.Region
+                          prefWidth="514" prefHeight="454"
+                          style="-fx-background-color: #4aaade;
+                                 -fx-effect: dropshadow(gaussian, #4aaade80, 18, 0.3, 0, 0);"/>
 
-                        <Canvas fx:id="canvas" width="462" height="462"/>
+                      <!-- Canvas inset by 2px -->
+                      <Canvas fx:id="canvas"
+                              layoutX="2" layoutY="2"
+                              width="510" height="450"/>
 
-                    </StackPane>
-                </StackPane>
-            </StackPane>
+                  </Group>
+              </StackPane>
         </center>
 
         <!-- BOTTOM: Controls hint -->
