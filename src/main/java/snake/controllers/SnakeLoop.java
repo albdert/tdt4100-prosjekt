@@ -94,7 +94,7 @@ public class SnakeLoop extends AnimationTimer{
             snake.extend();
             updateState();
             spawnNewFood();
-        };
+        }
 
         render();
     }

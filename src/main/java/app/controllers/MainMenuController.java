@@ -17,7 +17,7 @@ public class MainMenuController {
 
         switch (id) {
             case "snake"     -> {launchGame(Paths.SNAKE);}
-            case "tictactoe" -> {launchGame(Paths.TICTACTOE);}
+            case "tictactoe" -> {launchGame(Paths.BLOCK);}
             case "test"      -> {launchGame(Paths.TEST);}
             case "settings"  -> {debug();}
             case "credits"   -> {}
