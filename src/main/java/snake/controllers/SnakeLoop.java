@@ -14,6 +14,8 @@ public class SnakeLoop extends AnimationTimer{
 
     private long updateTime;
     private long updateInterval;
+    private int frameCount;
+    private int sui;
 
     private Consumer<Integer> onScoreChanged = score -> {};
     private Consumer<Integer> onLevelChanged = level -> {};
@@ -25,7 +27,8 @@ public class SnakeLoop extends AnimationTimer{
 
     public SnakeLoop(SnakeRenderer r, Snake s, Food f) {
         updateTime = 0;
-        updateInterval = 250_000_000;
+        updateInterval = 20_000_000;
+        sui = 10;
 
         renderer = r;
         snake = s;
@@ -39,23 +42,14 @@ public class SnakeLoop extends AnimationTimer{
             updateTime = now;
         }
     }
-    
-    public int getScore() {
-        return score;
-    }
 
-    public int getLevel() {
-        return level;
-    }
-
+    // callback functions
     public void setOnScoreChanged(Consumer<Integer> callback) {
         this.onScoreChanged = callback;
     }
-
     public void setOnLevelChanged(Consumer<Integer> callback) {
         this.onLevelChanged = callback;
     }
-
     public void setOnGameOver(Runnable callback) {
         this.onGameOver = callback;
     }
@@ -70,11 +64,14 @@ public class SnakeLoop extends AnimationTimer{
         score += 10 * level; 
         onScoreChanged.accept(score);
         eaten++;
-        if (eaten%5==0) { 
-            updateInterval -= 10_000_000;
-            level++; 
-            onLevelChanged.accept(level); 
-        }
+
+        if (!(eaten%10==0)) { return; }
+
+        if (sui>3) { sui--; }
+        frameCount = 0;
+
+        level++; 
+        onLevelChanged.accept(level); 
     }
     
     private void render() {
@@ -87,7 +84,7 @@ public class SnakeLoop extends AnimationTimer{
     public void update() {
         if (snake.isDead()) { onGameOver.run(); }
 
-        snake.move();
+        if (frameCount%sui==0) { snake.move(); }
 
         if (snake.isOnFood(food)) {
             snake.extend();
@@ -96,5 +93,6 @@ public class SnakeLoop extends AnimationTimer{
         }
 
         render();
+        frameCount++;
     }
 }
