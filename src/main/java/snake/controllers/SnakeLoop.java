@@ -68,7 +68,6 @@ public class SnakeLoop extends AnimationTimer{
 
     private void updateState() {
         score += 10 * level; 
-        System.out.println("Score updated: " + score);
         onScoreChanged.accept(score);
         eaten++;
         if (eaten%5==0) { 

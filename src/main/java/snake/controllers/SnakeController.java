@@ -1,14 +1,13 @@
 package snake.controllers;
 
-import app.SceneManager;
-import app.controllers.GameController;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+
+import app.controllers.GameController;
 import snake.model.Food;
 import snake.model.Grid;
 import snake.model.Snake;
@@ -36,26 +35,19 @@ public class SnakeController extends GameController {
             case DOWN,S  -> {snake.changeDir(Dir.DOWN);}
             case LEFT,A  -> {snake.changeDir(Dir.LEFT);}
             case RIGHT,D -> {snake.changeDir(Dir.RIGHT);}
-            //case SPACE -> {debug();}
-            case SPACE -> {snake.extend();}
-
             case ESCAPE -> {togglePauseMenu();}
+            //case SPACE -> {snake.extend();}
         }
-    }
-
-    // TODO: fjerne denne funksjonen når den ikke trengs
-    private void debug() {
-        Parent root = SceneManager.getInstance().getStage().getScene().getRoot();
-        System.out.println("\n");
-        System.out.println("Window height : " + root.getLayoutBounds().getHeight());
-        System.out.println("Window width: " + root.getLayoutBounds().getWidth());
-        System.out.println("\n");
     }
 
     @Override
     protected void initGame() {
         double w = canvas.getWidth();
         double h = canvas.getHeight();
+
+        scoreLabel.textProperty().bind(score.asString());
+        levelLabel.textProperty().bind(level.asString());
+
         gc = canvas.getGraphicsContext2D();
 
         renderer = new SnakeRenderer(gc, w, h);
@@ -64,23 +56,14 @@ public class SnakeController extends GameController {
         food = new Food(grid.ROWS, grid.COLS);
 
         loop = new SnakeLoop(renderer, snake, food);
-        loop.setOnScoreChanged(score -> scoreLabel.setText(String.valueOf(score)));
-        loop.setOnLevelChanged(level -> levelLabel.setText(String.valueOf(level)));
+        loop.setOnScoreChanged(s -> score.set(s));
+        loop.setOnLevelChanged(l -> level.set(l));
         loop.setOnGameOver(() -> Platform.runLater(() -> gameOver()));
         loop.start();
     }
 
     @Override
-    protected void pauseGame() {
-        // TODO: rydde opp i denne funksjonen
-        System.out.println("\n\nPaused game\n\n");
-        loop.stop();
-    }
-
+    protected void pauseGame() { loop.stop(); }
     @Override
-    protected void resumeGame() {
-        // TODO: rydde opp i denne funksjonen
-        System.out.println("\n\nUn-paused game\n\n");
-        loop.start();
-    }
+    protected void resumeGame() { loop.start(); }
 } 

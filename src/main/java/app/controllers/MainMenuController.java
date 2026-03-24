@@ -2,13 +2,13 @@ package app.controllers;
 
 import java.io.IOException;
 
-import app.SceneManager;
-import app.common.Paths;
+import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.event.Event;
-import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import app.SceneManager;
+import app.common.Paths;
 
 public class MainMenuController {
     @FXML

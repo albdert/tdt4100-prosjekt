@@ -12,6 +12,9 @@ public class Block {
     public void moveDown() {
         row++;
     }
+    public void moveUp() {
+        row--;
+    }
 
     public int getCol() {
         return column;

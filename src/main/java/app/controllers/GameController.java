@@ -4,15 +4,16 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import app.SceneManager;
-import app.common.Paths;
-import javafx.application.Platform;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.input.KeyCode;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyCode;
+import app.SceneManager;
+import app.common.Paths;
 
 public abstract class GameController {
     @FXML protected StackPane root;
@@ -21,9 +22,13 @@ public abstract class GameController {
     protected boolean isPaused = false;
 
     private VBox gameOverScreen;
-    protected boolean gameover = false;
+    protected boolean isGameOver = false;
 
     protected final Set<KeyCode> activeKeys = new HashSet<>();
+
+    protected String username = "player";
+    protected IntegerProperty score = new SimpleIntegerProperty(0);
+    protected IntegerProperty level = new SimpleIntegerProperty(0);
 
     /**
      * Initialize metode for GameController klasser.
@@ -50,21 +55,6 @@ public abstract class GameController {
     }
 
     /**
-     * Laster inn og lukker PauseMenu.
-     */
-    protected void togglePauseMenu() {
-        if (isPaused) {
-            root.getChildren().remove(pauseMenu);
-            isPaused = false;
-            resumeGame();
-        } else {
-            root.getChildren().add(pauseMenu);
-            isPaused = true;
-            pauseGame();
-        }
-    }
-
-    /**
      * Laster inn PauseMenu FXML fil.
      */
     private void initPauseMenu() {
@@ -78,11 +68,6 @@ public abstract class GameController {
         }
     }
 
-    public void gameOver() {
-        root.getChildren().add(gameOverScreen);
-        pauseGame();
-    }
-
     /**
      * Laster inn GameOver FXML fil.
      */
@@ -91,10 +76,52 @@ public abstract class GameController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.GAMEOVER));
             gameOverScreen = loader.load();
             GameOverController goc = loader.getController();
+            goc.getScoreLabel().textProperty().bind(score.asString());
+            goc.getLevelLabel().textProperty().bind(level.asString());
             goc.setGameController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Laster inn og lukker PauseMenu.
+     */
+    protected void togglePauseMenu() {
+        if (isGameOver) { return; }
+        if (isPaused) {
+            root.getChildren().remove(pauseMenu);
+            isPaused = false;
+            resumeGame();
+        } else {
+            root.getChildren().add(pauseMenu);
+            isPaused = true;
+            pauseGame();
+        }
+    }
+
+    /**
+     * Game over overlay
+     */
+    public void gameOver() {
+        root.getChildren().add(gameOverScreen);
+        isGameOver = true;
+        pauseGame();
+    }
+
+    /**
+     * Holder username definert i hovedmeny for å lagre scores/highscore
+     * @param name
+     */
+    public void setUsername(String name) {
+        username = name;
+    }
+    /**
+     * Getter for username-variabel
+     * @return String username
+     */
+    public String getUsername() {
+        return username;
     }
 
     /**

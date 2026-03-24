@@ -14,7 +14,6 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-
         SceneManager.getInstance().setStage(stage);
         SceneManager.getInstance().setScene(Paths.MENU);
 

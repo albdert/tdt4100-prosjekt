@@ -42,6 +42,8 @@ public class SceneManager {
     public void setScene(String fxmlPath) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            //GameController controller = loader.getController();
+            //controller.setUsername("test");
             Scene scene = new Scene(loader.load());
             scene.setUserData(fxmlPath);
             stage.setScene(scene);
