@@ -33,11 +33,16 @@ public class Blocks {
     public boolean isHit() {
         return hit;
     }
+    
+    private boolean isInAnotherBlock(int col) {
+        return false;
+    }
 
     public void spawnBlock() {
         Random random = new Random();
         for (int i=0; i<level+1; i++) {
             int randomCol = random.nextInt(9);
+            if (isInAnotherBlock(randomCol)) { continue; }
             Block randomBlockSpawn = new Block(randomCol);
             blocks.add(randomBlockSpawn);
         }

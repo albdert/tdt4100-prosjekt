@@ -1,7 +1,6 @@
 package block.controllers;
 
 import javafx.fxml.FXML;
-import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
@@ -33,7 +32,7 @@ public class BlockController extends GameController {
         switch (key) {
         case LEFT,A  -> {player.moveLeft();}
         case RIGHT,D -> {player.moveRight();}
-        case ESCAPE -> {togglePauseMenu();}
+        case ESCAPE  -> {togglePauseMenu();}
         }
     }
 
@@ -52,7 +51,7 @@ public class BlockController extends GameController {
         blocks.setOnLevelChanged(i -> level.set(level.get()+i));
 
         loop = new BlockLoop(renderer, player, blocks);
-        loop.setOnGameOver(() -> Platform.runLater(() -> gameOver()));
+        loop.setOnGameOver(() -> gameOver());
         loop.start();
         pauseGame();
     }
