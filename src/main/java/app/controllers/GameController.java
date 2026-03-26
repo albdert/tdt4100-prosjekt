@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyCode;
+import app.AppState;
 import app.SceneManager;
 import app.common.Paths;
 
@@ -26,7 +27,7 @@ public abstract class GameController {
 
     protected final Set<KeyCode> activeKeys = new HashSet<>();
 
-    protected String username = "player";
+    protected String username = AppState.getInstance().getPlayerName();
     protected IntegerProperty score = new SimpleIntegerProperty(0);
     protected IntegerProperty level = new SimpleIntegerProperty(0);
 

@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.Node;
-import javafx.scene.Parent;
+
 import app.SceneManager;
 import app.common.Paths;
 
@@ -16,28 +16,16 @@ public class MainMenuController {
         String id = ( (Node)e.getSource() ).getId();
 
         switch (id) {
-            case "snake"     -> {launchGame(Paths.SNAKE);}
-            case "tictactoe" -> {launchGame(Paths.BLOCK);}
-            case "test"      -> {launchGame(Paths.TEST);}
-            case "settings"  -> {debug();}
-            case "credits"   -> {launchGame(Paths.CREDITS);}
-            case "quit"      -> {Platform.exit();}
-            default -> {
-                System.out.println("hello world");
-            }
+            case "snake"      -> {setScene(Paths.SNAKE);}
+            case "tictactoe"  -> {setScene(Paths.BLOCK);}
+            case "test"       -> {setScene(Paths.WOLF);}
+            case "settings"   -> {}
+            case "highscores" -> {setScene(Paths.HIGHSCORE);}
+            case "quit"       -> {Platform.exit();}
         }
     }   
-    //TODO: fjerne denne funksjonen når den ikke trengs lengre
-    private void debug() {
-        Parent root = SceneManager.getInstance().getStage().getScene().getRoot();
-        System.out.println("\n");
-        System.out.println("Window height : " + root.getLayoutBounds().getHeight());
-        System.out.println("Window width: " + root.getLayoutBounds().getWidth());
-        System.out.println("\n");
-    }
 
-    //TODO: endre funksjon til et mer generelt navn
-    private void launchGame(String path) throws IOException {
+    private void setScene(String path) throws IOException {
         SceneManager.getInstance().setScene(path);
     }
 }
