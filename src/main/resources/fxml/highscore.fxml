@@ -1,96 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="app.controllers.MainMenuController"
-            style="-fx-background-color: #0d0d0f;"
-            prefWidth="720" prefHeight="720">
+<BorderPane prefHeight="720" prefWidth="720" style="-fx-background-color: #0d0d0f;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="app.controllers.HighscoreController">
 
     <!-- TOP: Title bar -->
     <top>
         <VBox alignment="CENTER" style="-fx-padding: 32 0 16 0;">
-            <Label text="HIGHSCORES"
-                   style="-fx-text-fill: #ffffff;
-                          -fx-font-size: 36;
-                          -fx-font-weight: bold;
-                          -fx-letter-spacing: 8;"/>
-            <Label text="placeholder"
-                   style="-fx-text-fill: #555566;
-                          -fx-font-size: 11;
-                          -fx-letter-spacing: 4;"/>
+            <Label style="-fx-text-fill: #ffffff;                           -fx-font-size: 36;                           -fx-font-weight: bold;                           -fx-letter-spacing: 8;" text="HIGHSCORES" />
+            <Label style="-fx-text-fill: #555566;                           -fx-font-size: 11;                           -fx-letter-spacing: 4;" text="placeholder" />
+
+            <!-- Sort buttons -->
+            <HBox alignment="CENTER" spacing="12" style="-fx-padding: 16 0 0 0;">
+                <Label style="-fx-text-fill: #555566;                               -fx-font-size: 11;                               -fx-font-weight: bold;                               -fx-letter-spacing: 2;" text="SORT BY:" />
+                <Button fx:id="sortByGame" onAction="#handleSortByGame" style="-fx-background-color: #1a1a2e;                                -fx-text-fill: #888899;                                -fx-font-size: 11;                                -fx-font-weight: bold;                                -fx-letter-spacing: 2;                                -fx-padding: 8 20;                                -fx-background-radius: 6;                                -fx-border-color: #2a2a4a;                                -fx-border-width: 1;                                -fx-border-radius: 6;                                -fx-cursor: hand;" text="GAME ↕" />
+                <Button fx:id="sortByPlayer" onAction="#handleSortByPlayer" style="-fx-background-color: #1a1a2e;                                -fx-text-fill: #888899;                                -fx-font-size: 11;                                -fx-font-weight: bold;                                -fx-letter-spacing: 2;                                -fx-padding: 8 20;                                -fx-background-radius: 6;                                -fx-border-color: #2a2a4a;                                -fx-border-width: 1;                                -fx-border-radius: 6;                                -fx-cursor: hand;" text="PLAYER ↕" />
+                <Button fx:id="sortByScore" onAction="#handleSortByScore" style="-fx-background-color: #1a1a2e;                                -fx-text-fill: #888899;                                -fx-font-size: 11;                                -fx-font-weight: bold;                                -fx-letter-spacing: 2;                                -fx-padding: 8 20;                                -fx-background-radius: 6;                                -fx-border-color: #2a2a4a;                                -fx-border-width: 1;                                -fx-border-radius: 6;                                -fx-cursor: hand;" text="SCORE ↕" />
+            </HBox>
         </VBox>
     </top>
 
-    <!-- Highscore table -->
+    <!-- CENTER: Highscore table -->
     <center>
-        <HBox alignment="CENTER"
-              spacing="24"
-              style="-fx-padding: 16 40 16 40;">
+        <VBox alignment="CENTER" style="-fx-padding: 16 40 16 40;">
 
-            
-        </HBox>
+            <!-- Table header -->
+            <HBox style="-fx-background-color: #1a1a2e;                          -fx-padding: 10 16;                          -fx-background-radius: 6 6 0 0;                          -fx-border-color: #2a2a4a;                          -fx-border-width: 1 1 0 1;                          -fx-border-radius: 6 6 0 0;">
+                <Label style="-fx-text-fill: #555566;                               -fx-font-size: 11;                               -fx-font-weight: bold;                               -fx-letter-spacing: 2;                               -fx-min-width: 40;" text="#" />
+                <Label style="-fx-text-fill: #555566;                               -fx-font-size: 11;                               -fx-font-weight: bold;                               -fx-letter-spacing: 2;                               -fx-min-width: 200;" text="GAME" />
+                <Label style="-fx-text-fill: #555566;                               -fx-font-size: 11;                               -fx-font-weight: bold;                               -fx-letter-spacing: 2;                               -fx-min-width: 200;" text="PLAYER" />
+                <Label style="-fx-text-fill: #555566;                               -fx-font-size: 11;                               -fx-font-weight: bold;                               -fx-letter-spacing: 2;" text="SCORE" />
+            </HBox>
+
+            <!-- Scrollable rows -->
+            <ScrollPane fitToWidth="true" prefHeight="420" style="-fx-background-color: transparent;                                -fx-background: transparent;                                -fx-border-color: #2a2a4a;                                -fx-border-width: 0 1 1 1;                                -fx-border-radius: 0 0 6 6;">
+                <VBox fx:id="scoresContainer" style="-fx-background-color: transparent;">
+                    <!-- Rows are added here programmatically in the controller -->
+                </VBox>
+            </ScrollPane>
+
+        </VBox>
     </center>
 
-    <!-- BOTTOM: Settings, Credits, Quit -->
+    <!-- BOTTOM: Main Menu, Settings, Credits, Quit -->
     <bottom>
-        <HBox alignment="CENTER"
-              spacing="16"
-              style="-fx-padding: 20 40 32 40;">
-
-            <Button fx:id="settings"
-                    text="⚙  SETTINGS"
-                    onAction="#handleButtonClick"
-                    style="-fx-background-color: #1a1a2e;
-                           -fx-text-fill: #888899;
-                           -fx-font-size: 11;
-                           -fx-font-weight: bold;
-                           -fx-letter-spacing: 2;
-                           -fx-padding: 10 24;
-                           -fx-background-radius: 6;
-                           -fx-border-color: #2a2a4a;
-                           -fx-border-width: 1;
-                           -fx-border-radius: 6;
-                           -fx-cursor: hand;"/>
-
-            <Button fx:id="credits"
-                    text="★  CREDITS"
-                    onAction="#handleButtonClick"
-                    style="-fx-background-color: #1a1a2e;
-                           -fx-text-fill: #888899;
-                           -fx-font-size: 11;
-                           -fx-font-weight: bold;
-                           -fx-letter-spacing: 2;
-                           -fx-padding: 10 24;
-                           -fx-background-radius: 6;
-                           -fx-border-color: #2a2a4a;
-                           -fx-border-width: 1;
-                           -fx-border-radius: 6;
-                           -fx-cursor: hand;"/>
-
-            <Button fx:id="quit"
-                    text="✕  QUIT"
-                    onAction="#handleButtonClick"
-                    style="-fx-background-color: #2a1a1a;
-                           -fx-text-fill: #ef4444;
-                           -fx-font-size: 11;
-                           -fx-font-weight: bold;
-                           -fx-letter-spacing: 2;
-                           -fx-padding: 10 24;
-                           -fx-background-radius: 6;
-                           -fx-border-color: #4a2a2a;
-                           -fx-border-width: 1;
-                           -fx-border-radius: 6;
-                           -fx-cursor: hand;"/>
-
+        <HBox alignment="CENTER" spacing="16" style="-fx-padding: 20 40 32 40;">
+            <Button fx:id="mainMenu" onAction="#handleButtonClick" style="-fx-background-color: #1a2e1a;                            -fx-text-fill: #4ade80;                            -fx-font-size: 11;                            -fx-font-weight: bold;                            -fx-letter-spacing: 2;                            -fx-padding: 10 24;                            -fx-background-radius: 6;                            -fx-border-color: #2a4a2a;                            -fx-border-width: 1;                            -fx-border-radius: 6;                            -fx-cursor: hand;" text="⌂  MAIN MENU" />
+            <Button fx:id="quit" onAction="#handleButtonClick" style="-fx-background-color: #2a1a1a;                            -fx-text-fill: #ef4444;                            -fx-font-size: 11;                            -fx-font-weight: bold;                            -fx-letter-spacing: 2;                            -fx-padding: 10 24;                            -fx-background-radius: 6;                            -fx-border-color: #4a2a2a;                            -fx-border-width: 1;                            -fx-border-radius: 6;                            -fx-cursor: hand;" text="✕  QUIT" />
         </HBox>
     </bottom>
 

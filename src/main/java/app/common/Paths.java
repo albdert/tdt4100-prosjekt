@@ -11,5 +11,5 @@ public final class Paths {
     public static final String BLOCK       = "/fxml/block.fxml";
     public static final String GAMEOVER   = "/fxml/gameover.fxml";
     public static final String SETTINGS   = "/fxml/settings.fxml";
-    public static final String CREDITS    = "/fxml/credits.fxml";
+    public static final String CREDITS    = "/fxml/highscore.fxml";
 }

@@ -10,8 +10,6 @@ import app.SceneManager;
 import app.common.Paths;
 
 public class GameOverController {
-    //private GameController gc;
-
     @FXML private Label scoreLabel;
     @FXML private Label highScoreLabel;
     @FXML private Label levelLabel;
@@ -27,10 +25,6 @@ public class GameOverController {
             case "restart"   -> {restart();}
             case "savescore" -> {savescore();}
         }
-    }
-
-    public void setGameController(GameController gc) {
-        //this.gc = gc;
     }
 
     private void menu() throws IOException {

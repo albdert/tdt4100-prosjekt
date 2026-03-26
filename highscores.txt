@@ -1,0 +1,16 @@
+#Snake
+Albert,1000
+Clem,300
+Ola,50000
+#Block
+Adele,1000
+Lea,300
+Linde,50000
+Ingrid,50
+#Wolf
+testperson,1000
+dust,300
+teit,50000
+Johannes,1000
+Kasper,300
+Sivert,50000

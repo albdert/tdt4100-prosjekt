@@ -9,55 +9,52 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FileManager{
-    private String filename = "scores.txt";
+    //private final static String filename = "highscores/highscores.txt";
+    private final static String filename = "highscores.txt";
 
-    public void saveScore(String username, int score) {
+    public void saveScores(String game, String username, int score) {
+        Map<String, Map<String, Integer>> scores = loadScores();
 
-        Map<String, Integer> scores = new HashMap<>();
-
-        try(BufferedReader reader = new BufferedReader(new FileReader(filename))){
-            String line;
-            while ((line = reader.readLine()) != null) {
-
-                String[] parts = line.split(",");
-                String fileUsername = parts[0]; //"navn"
-                int fileScore = Integer.parseInt(parts[1]); //"score"
-
-                scores.put(fileUsername, fileScore);
-            }
-        }
-        catch(IOException e) {
-        }
-
-        if (scores.containsKey(username)) {
-            if (score > scores.get(username)) {
-                scores.put(username, score);
-            }
-        }
-        else {
-            scores.put(username,score);
+        if (!scores.get(game).containsKey(username) ||
+           (score > scores.get(game).get(username))) {
+            scores.get(game).put(username,score);
         }
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (Map.Entry<String, Integer> entry : scores.entrySet()) {
-                writer.write(entry.getKey() + "," + entry.getValue());
-                writer.newLine();
+            for (Map.Entry<String, Map<String, Integer>> games : scores.entrySet()) {
+                writer.write("#"+games.getKey());
+
+                Map<String, Integer> inner = games.getValue();
+                for (Map.Entry<String, Integer> entry : inner.entrySet() ) {
+                    writer.write(entry.getKey() + "," + entry.getValue()+"\n");
+                }
             }
         }
         catch(IOException e) {}
     }
 
-    public Map<String,Integer> loadScores() {
-        Map<String, Integer> scores = new HashMap<>();
+    public Map<String, Map<String,Integer>> loadScores() {
 
-        try(BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        Map<String, Map<String, Integer>> scores = new HashMap<>();
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(filename))){
+            int i = -1;
+            String[] game = new String[3];
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                String fileUsername = parts[0];
-                int fileScore = Integer.parseInt(parts[1]);
 
-                scores.put(fileUsername, fileScore);
+                if (line.charAt(0)=='#'){
+                    i++;
+                    game[i] = line.split("#")[1];
+                    scores.put(game[i], new HashMap<String, Integer>());
+                    continue;
+                }
+
+                String[] parts = line.split(",");
+                String fileUsername = parts[0]; //"navn"
+                int fileScore = Integer.parseInt(parts[1]); //"score"
+
+                scores.get(game[i]).put(fileUsername, fileScore);
             }
         }
         catch(IOException e) {}

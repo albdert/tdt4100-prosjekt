@@ -20,7 +20,7 @@ public class MainMenuController {
             case "tictactoe" -> {launchGame(Paths.BLOCK);}
             case "test"      -> {launchGame(Paths.TEST);}
             case "settings"  -> {debug();}
-            case "credits"   -> {}
+            case "credits"   -> {launchGame(Paths.CREDITS);}
             case "quit"      -> {Platform.exit();}
             default -> {
                 System.out.println("hello world");

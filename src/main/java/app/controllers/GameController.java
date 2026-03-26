@@ -78,7 +78,6 @@ public abstract class GameController {
             GameOverController goc = loader.getController();
             goc.getScoreLabel().textProperty().bind(score.asString());
             goc.getLevelLabel().textProperty().bind(level.asString());
-            goc.setGameController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
