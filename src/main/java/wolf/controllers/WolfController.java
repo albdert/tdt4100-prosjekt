@@ -1,19 +1,17 @@
 package wolf.controllers;
 
-import app.SceneManager;
+import app.common.Vector2d;
 import app.controllers.GameController;
 
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-
 import wolf.model.Player;
 import wolf.model.World;
 import wolf.view.WolfRenderer;
 
-public class WolfController extends GameController{
+public class WolfController extends GameController {
 
     @FXML private Canvas canvas;
     private GraphicsContext gc;
@@ -23,46 +21,31 @@ public class WolfController extends GameController{
     private WolfLoop loop;
     private WolfRenderer renderer;
 
-    // TODO: fjerne denne funksjonen når den ikke trengs
-    private void debug() {
-        Parent root = SceneManager.getInstance().getStage().getScene().getRoot();
-        System.out.println("\n");
-        System.out.println("Window height : " + root.getLayoutBounds().getHeight());
-        System.out.println("Window width: " + root.getLayoutBounds().getWidth());
-        System.out.println("\n");
-    }
+    private Vector2d mouse = new Vector2d(0, 0);
 
     @Override
     protected void initGame() {
+        canvas.setOnMouseMoved(e -> {mouse.x = e.getX(); mouse.y = e.getY();});
+        canvas.setOnMouseDragged(e -> {mouse.x = e.getX(); mouse.y = e.getY();});
+
         gc = canvas.getGraphicsContext2D();
 
-        renderer = new WolfRenderer();
+        renderer = new WolfRenderer(gc);
         player = new Player();
         world = new World();
 
-        loop = new WolfLoop(gc, renderer, world, player, activeKeys);
+        loop = new WolfLoop(gc, renderer, world, player, activeKeys, activeMouseButtons, mouse);
         loop.start();
     }
 
     @Override
     protected void handleInput(KeyCode key) {
         switch (key) {
-            case SPACE -> {debug();}
+            case SPACE -> {}
             case ESCAPE -> {togglePauseMenu();}
         }
     }
     
-    @Override
-    protected void pauseGame() {
-        // TODO: rydde opp i denne funksjonen
-        System.out.println("\n\nPaused game\n\n");
-        loop.stop();
-    }
-
-    @Override
-    protected void resumeGame() {
-        // TODO: rydde opp i denne funksjonen
-        System.out.println("\n\nUn-paused game\n\n");
-        loop.start();
-    }
+    @Override protected void pauseGame() { loop.stop(); }
+    @Override protected void resumeGame() { loop.start(); }
 }

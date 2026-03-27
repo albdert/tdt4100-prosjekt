@@ -19,7 +19,7 @@ public class MainMenuController {
             case "snake"      -> {setScene(Paths.SNAKE);}
             case "tictactoe"  -> {setScene(Paths.BLOCK);}
             case "test"       -> {setScene(Paths.WOLF);}
-            case "settings"   -> {}
+            case "settings"   -> {setScene(Paths.NAMEINPUT);}
             case "highscores" -> {setScene(Paths.HIGHSCORE);}
             case "quit"       -> {Platform.exit();}
         }

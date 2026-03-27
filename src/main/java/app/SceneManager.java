@@ -1,6 +1,7 @@
 package app;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -41,9 +42,10 @@ public class SceneManager {
 
     public void setScene(String fxmlPath) throws IOException {
         try {
+            URL url = getClass().getResource(fxmlPath);
+            if (url == null) throw new IllegalStateException("FXML not found: " + fxmlPath);
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            //GameController controller = loader.getController();
-            //controller.setUsername("test");
             Scene scene = new Scene(loader.load());
             scene.setUserData(fxmlPath);
             stage.setScene(scene);

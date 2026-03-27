@@ -6,7 +6,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-
+import javafx.scene.input.MouseButton;
 import app.controllers.GameController;
 import snake.model.Food;
 import snake.model.Grid;

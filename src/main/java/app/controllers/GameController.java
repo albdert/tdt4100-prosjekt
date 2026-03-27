@@ -11,7 +11,9 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import app.AppState;
 import app.SceneManager;
 import app.common.Paths;
@@ -26,6 +28,7 @@ public abstract class GameController {
     protected boolean isGameOver = false;
 
     protected final Set<KeyCode> activeKeys = new HashSet<>();
+    protected final Set<MouseButton> activeMouseButtons = new HashSet<>();
 
     protected String username = AppState.getInstance().getPlayerName();
     protected IntegerProperty score = new SimpleIntegerProperty(0);
@@ -41,13 +44,25 @@ public abstract class GameController {
     @FXML
     private void initialize() {
         Platform.runLater(() -> {
-            SceneManager.getInstance().getStage().getScene().setOnKeyPressed(e -> {
-                    activeKeys.add(e.getCode());
-                    handleInput(e.getCode());
+            Scene scene = SceneManager.getInstance().getStage().getScene();
+
+            // keyboard keys
+            scene.setOnKeyPressed(e -> {
+                activeKeys.add(e.getCode());
+                handleInput(e.getCode());
+            });
+            scene.setOnKeyReleased(e -> {
+                activeKeys.remove(e.getCode());
             });
 
-            SceneManager.getInstance().getStage().getScene()
-                .setOnKeyReleased(e -> activeKeys.remove(e.getCode()));
+            // mouse buttons
+            scene.setOnMousePressed(e -> {
+                activeMouseButtons.add(e.getButton());
+            });
+            scene.setOnMouseReleased(e -> {
+                activeMouseButtons.remove(e.getButton());
+            });
+
         });
 
         initPauseMenu();
