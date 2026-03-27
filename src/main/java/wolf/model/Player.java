@@ -1,38 +1,47 @@
 package wolf.model;
 
-import java.util.Vector;
-
 import app.common.Vector2d;
 import app.common.Vector2di;
 
 public class Player {
     private double pi = Math.PI;
     private double tau = 2*Math.PI;
-    private Vector2d pos = new Vector2d(0, 0);
+    private Vector2d pos;    
     private Vector2d dpos = new Vector2d(0, 0);
+    private Vector2d cplane = new Vector2d(0, 0);
+
     private double angle;
 
+    public double lastWallDist = 0;
+    public int lastWallType = 0;
+    public int lastWallSide = 0;
+
     public Player() {
-        pos.x = 22;
-        pos.y = 12;
+        pos  = new Vector2d(12,22);
 
         angle  = 0;
         dpos.x = Math.cos(angle)*2;
         dpos.y = Math.sin(angle)*2;
+        cplane.x = Math.cos(angle + pi/2) * 0.66;
+        cplane.y = Math.sin(angle + pi/2) * 0.66;
     }
 
     public void lookLeft() {
-        angle -= 0.1;
+        angle -= 0.05;
         if (angle<0) { angle+=tau; }
         dpos.x = Math.cos(angle)*2;
         dpos.y = Math.sin(angle)*2;
+        cplane.x = Math.cos(angle + pi/2) * 0.66;
+        cplane.y = Math.sin(angle + pi/2) * 0.66;
     }
 
     public void lookRight() {
-        angle += 0.1;
+        angle += 0.05;
         if (angle>tau) { angle-=tau; }
         dpos.x = Math.cos(angle)*2;
         dpos.y = Math.sin(angle)*2;
+        cplane.x = Math.cos(angle + pi/2) * 0.66;
+        cplane.y = Math.sin(angle + pi/2) * 0.66;
     }
 
     public void moveForward() {
@@ -53,61 +62,138 @@ public class Player {
         pos.x += v.x;
         pos.y += v.y;
     }
-    
-    public Vector2d calcRay(int[][] world, Vector2d mouse) {
-        Vector2d rpos = pos;
-        Vector2d rangle = Vector2d.sub(mouse, pos).norm();    
-        Vector2d runit = new Vector2d(Math.sqrt(1 + Math.pow(rangle.y/rangle.x,2)), Math.sqrt(1 + Math.pow(rangle.x/rangle.y,2)));
 
-        Vector2di mapcheck = new Vector2di((int)rpos.x, (int)rpos.y);
-        Vector2d rlen = new Vector2d(0,0);
-        Vector2di step = new Vector2di(0,0);
+    public Vector2d calcRay2d(int[][] world) {
 
-        if (rangle.x<0) {
-            step.x=-1;
-            rlen.x = (rpos.x - (double)mapcheck.x) * step.x;
+        // ray start posisjon og retning
+        Vector2di map = new Vector2di((int)pos.x/20, (int)pos.y/20);
+        Vector2d start = new Vector2d(pos.x/20, pos.y/20);
+        Vector2d dir = new Vector2d(Math.cos(angle), Math.sin(angle));
+
+        // distanse beveget i hver retning & delta steg
+        Vector2d dist = new Vector2d(0,0);
+        Vector2d dstep = new Vector2d((dir.x==0)?1e30:Math.abs(1/dir.x), (dir.y==0)?1e30:Math.abs(1/dir.y));
+
+        // steg retning
+        Vector2di step = new Vector2di(0, 0);
+
+        // distanse til vegg
+        double walldist = 0;
+
+        // truffet vegg, horisontal/vertikal vegg
+        boolean hit = false;
+        int side = 0;
+
+        // finner retning for stegene, og første steg vector
+        if (dir.x<0) {
+            step.x = -1;
+            dist.x = (start.x-map.x) * dstep.x;
         } else {
-            step.x=1;
-            rlen.x = ((double)mapcheck.x+1 - rpos.x) * step.x;
+            step.x = 1;
+            dist.x = (map.x+1-start.x) * dstep.x;
         }
-        if (rangle.y<0) {
-            step.y=-1;
-            rlen.y = (rpos.y - (double)mapcheck.y) * step.y;
+        if (dir.y<0) {
+            step.y = -1;
+            dist.y = (start.y-map.y) * dstep.y;
         } else {
-            step.y=1;
-            rlen.y = ((double)mapcheck.y+1 - rpos.y) * step.y;
+            step.y = 1;
+            dist.y = (map.y+1-start.y) * dstep.y;
         }
 
-        boolean tileFound = false;
-        double maxdist = 100;
-        double dist = 0;
-        while (!tileFound && (dist<maxdist)) {
-            if (rlen.x<rlen.y) {
-                mapcheck.x += step.x;
-                dist = rlen.x;
-                rlen.x += runit.x;
+        // DDA
+        while (!hit) {
+            // gå til neste posisjon (enten i x, eller y retning)
+            if (dist.x<dist.y) {
+                dist.x += dstep.x;
+                map.x += step.x;
+                side = 0;
             } else {
-                mapcheck.y += step.y;
-                dist = rlen.y;
-                rlen.y += runit.y;
+                dist.y += dstep.y;
+                map.y += step.y;
+                side = 1;
             }
 
-            System.out.println("Test1");
-            System.out.println(mapcheck.x+" "+mapcheck.y);
-            if ((mapcheck.x>=0 && mapcheck.x<world.length) && (mapcheck.y>=0 && mapcheck.y<world[0].length)) {
-                System.out.println("Test2");
-                if (world[mapcheck.x][mapcheck.y]==1) {
-                    tileFound = true;
-                }
-            }
+            // sjekk om posisjon er vegg
+            if (world[map.y][map.x]>0) { hit=true; }
         }
 
-        Vector2d intersection = new Vector2d(0,0);
-        if (tileFound) {
-            intersection = Vector2d.add(rpos,rangle.times(dist));
-        }
-        return intersection;
+        if (side==0) { walldist = (dist.x-dstep.x); }
+        else         { walldist = (dist.y-dstep.y); }
+        
+        //Vector2d towall = dir.times(walldist).times(20);
+        //Vector2d towall = new Vector2d(dir.x * walldist * 20, dir.y * walldist * 20);
+        lastWallDist = walldist;
+        lastWallType = world[map.y][map.x];
+        lastWallSide = side;
+        Vector2d endPos = new Vector2d(pos.x + dir.x * walldist * 20, pos.y + dir.y * walldist * 20);
+        return endPos;
     }
+
+    public Vector2d calcRay3d(int[][] world, double cameraX) {
+
+        // ray start posisjon og retning
+        Vector2di map = new Vector2di((int)pos.x/20, (int)pos.y/20);
+        Vector2d start = new Vector2d(pos.x/20, pos.y/20);
+        Vector2d pdir = new Vector2d(Math.cos(angle), Math.sin(angle));
+        Vector2d dir = new Vector2d(pdir.x+cplane.x*cameraX, pdir.y+cplane.y*cameraX);
+
+        // distanse beveget i hver retning & delta steg
+        Vector2d dist = new Vector2d(0,0);
+        Vector2d dstep = new Vector2d((dir.x==0)?1e30:Math.abs(1/dir.x), (dir.y==0)?1e30:Math.abs(1/dir.y));
+
+        // steg retning
+        Vector2di step = new Vector2di(0, 0);
+
+        // distanse til vegg
+        double walldist = 0;
+
+        // truffet vegg, horisontal/vertikal vegg
+        boolean hit = false;
+        int side = 0;
+
+        // finner retning for stegene, og første steg vector
+        if (dir.x<0) {
+            step.x = -1;
+            dist.x = (start.x-map.x) * dstep.x;
+        } else {
+            step.x = 1;
+            dist.x = (map.x+1-start.x) * dstep.x;
+        }
+        if (dir.y<0) {
+            step.y = -1;
+            dist.y = (start.y-map.y) * dstep.y;
+        } else {
+            step.y = 1;
+            dist.y = (map.y+1-start.y) * dstep.y;
+        }
+
+        // DDA
+        while (!hit) {
+            // gå til neste posisjon (enten i x, eller y retning)
+            if (dist.x<dist.y) {
+                dist.x += dstep.x;
+                map.x += step.x;
+                side = 0;
+            } else {
+                dist.y += dstep.y;
+                map.y += step.y;
+                side = 1;
+            }
+
+            // sjekk om posisjon er vegg
+            if (world[map.y][map.x]>0) { hit=true; }
+        }
+
+        if (side==0) { walldist = (dist.x-dstep.x); }
+        else         { walldist = (dist.y-dstep.y); }
+        
+        lastWallDist = walldist;
+        lastWallType = world[map.y][map.x];
+        lastWallSide = side;
+        Vector2d endPos = new Vector2d(pos.x + dir.x * walldist * 20, pos.y + dir.y * walldist * 20);
+        return endPos;
+    }
+
 
     public Vector2d getPos() {
         //return new Vector2di((int) pos.x, (int) pos.y);

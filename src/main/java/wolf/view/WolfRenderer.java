@@ -1,28 +1,35 @@
 package wolf.view;
 
 import app.common.Vector2d;
+import app.common.Vector2di;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class WolfRenderer {
     GraphicsContext gc;
+    Vector2di dim;
 
-    public WolfRenderer(GraphicsContext g) {
+    public WolfRenderer(GraphicsContext g, Vector2di d) {
         gc = g;
+        dim = d;
     }
 
-    public void clear() {
-        gc.setFill(Color.WHITE);
+    public void clear(Color c) {
+        gc.setFill(c);
         gc.clearRect(0, 0, 640, 480);
         gc.fillRect(0, 0, 640, 480);
     }
 
-    public void drawLine(Vector2d s, Vector2d e, Color c) {
+    //---------------------
+    // Rendering i 2d
+    //---------------------
+    public void drawVec(Vector2d s, Vector2d e, Color c) {
         gc.setStroke(c);
         gc.setLineWidth(1);
         gc.strokeLine(s.x, s.y, s.x+e.x*10, s.y+e.y*10);
     }
-    public void testLine(Vector2d s, Vector2d e) {
+
+    public void drawLine(Vector2d s, Vector2d e) {
         gc.setStroke(Color.RED);
         gc.setLineWidth(1);
         gc.strokeLine(s.x, s.y, e.x, e.y);
@@ -54,18 +61,36 @@ public class WolfRenderer {
         }
     }
 
-    public void drawPlayer(Vector2d p) {
+    public void drawPlayer2d(Vector2d p) {
         gc.setFill(Color.RED);
         gc.fillRect(p.x-5, p.y-5, 10, 10);
     }
+
     
-    public void render() {
-        gc.setFill(Color.BLUE);
-        gc.fillRect(75, 75, 100, 100);
-        gc.fillOval(200, 200, 30, 20);
-    }
-    public void testRender(int x, int y) {
-        gc.setFill(Color.RED);
-        gc.fillRect(x, y, 10, 10);
+    //---------------------
+    // Rendering i 3d
+    //---------------------
+    public void drawWallSegment(int x, double dist, int type, int side) {
+        int lineHeight = (int) (dim.y/dist);
+
+        // finner start og end pixel
+        int start = (-lineHeight / 2) + (dim.y/2);
+        if (start<0) { start=0; }
+        int end = (lineHeight / 2) + (dim.y/2);
+        if (end>=dim.y) { end=dim.y-1; }
+        
+        switch (type) {
+        case 1 -> gc.setStroke(Color.RED);
+        case 2 -> gc.setStroke(Color.GREEN);
+        case 3 -> gc.setStroke(Color.BLUE);
+        case 4 -> gc.setStroke(Color.WHITE);
+        default-> gc.setStroke(Color.YELLOW);
+        }
+
+        if (side == 1) {
+            gc.setStroke(((Color)gc.getStroke()).darker());
+        }
+        gc.setLineWidth(1);
+        gc.strokeLine(x, start, x, end);
     }
 }

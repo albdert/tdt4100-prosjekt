@@ -1,6 +1,7 @@
 package wolf.controllers;
 
 import app.common.Vector2d;
+import app.common.Vector2di;
 import app.controllers.GameController;
 
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ public class WolfController extends GameController {
 
     @FXML private Canvas canvas;
     private GraphicsContext gc;
+    public Vector2di dim;
 
     private Player player;
     private World world;
@@ -29,12 +31,13 @@ public class WolfController extends GameController {
         canvas.setOnMouseDragged(e -> {mouse.x = e.getX(); mouse.y = e.getY();});
 
         gc = canvas.getGraphicsContext2D();
+        dim = new Vector2di((int)canvas.getWidth(), (int)canvas.getHeight());
 
-        renderer = new WolfRenderer(gc);
+        renderer = new WolfRenderer(gc, dim);
         player = new Player();
         world = new World();
 
-        loop = new WolfLoop(gc, renderer, world, player, activeKeys, activeMouseButtons, mouse);
+        loop = new WolfLoop(gc, renderer, world, player, activeKeys, activeMouseButtons, mouse, dim);
         loop.start();
     }
 
