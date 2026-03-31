@@ -8,8 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import wolf.model.Player;
-import wolf.model.World;
 import wolf.view.WolfRenderer;
 
 public class WolfController extends GameController {
@@ -18,8 +16,6 @@ public class WolfController extends GameController {
     private GraphicsContext gc;
     public Vector2di dim;
 
-    private Player player;
-    private World world;
     private WolfLoop loop;
     private WolfRenderer renderer;
 
@@ -34,19 +30,14 @@ public class WolfController extends GameController {
         dim = new Vector2di((int)canvas.getWidth(), (int)canvas.getHeight());
 
         renderer = new WolfRenderer(gc, dim);
-        player = new Player();
-        world = new World();
 
-        loop = new WolfLoop(gc, renderer, world, player, activeKeys, activeMouseButtons, mouse, dim);
+        loop = new WolfLoop(renderer, dim, activeKeys, activeMouseButtons, mouse);
         loop.start();
     }
 
     @Override
     protected void handleInput(KeyCode key) {
-        switch (key) {
-            case SPACE -> {}
-            case ESCAPE -> {togglePauseMenu();}
-        }
+        if (key==KeyCode.ESCAPE) { togglePauseMenu(); }
     }
     
     @Override protected void pauseGame() { loop.stop(); }

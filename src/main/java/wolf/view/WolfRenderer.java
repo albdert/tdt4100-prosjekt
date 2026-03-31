@@ -3,6 +3,7 @@ package wolf.view;
 import app.common.Vector2d;
 import app.common.Vector2di;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class WolfRenderer {
@@ -18,6 +19,15 @@ public class WolfRenderer {
         gc.setFill(c);
         gc.clearRect(0, 0, 640, 480);
         gc.fillRect(0, 0, 640, 480);
+    }
+
+    public void clearTop(Color c) {
+        gc.setFill(c);
+        gc.fillRect(0, 0, 640, 240);
+    }
+    public void clearBot(Color c) {
+        gc.setFill(c);
+        gc.fillRect(0, 240, 640, 480);
     }
 
     //---------------------
@@ -90,7 +100,20 @@ public class WolfRenderer {
         if (side == 1) {
             gc.setStroke(((Color)gc.getStroke()).darker());
         }
+
         gc.setLineWidth(1);
-        gc.strokeLine(x, start, x, end);
+        gc.strokeLine(x+0.5, start, x+0.5, end);
+    }
+
+    public void drawGun(String path) {
+        Image gun = new Image(path);
+        gc.drawImage(gun, dim.x/2-32, dim.y-64);    
+        gc.drawImage(gun, dim.x/2-128, dim.y-256, 256,256);
+    }
+
+    public void drawEnemy(String path) {
+        Image gun = new Image(path);
+        gc.drawImage(gun, dim.x/2-32, dim.y-64);    
+        gc.drawImage(gun, dim.x/2-128, dim.y-256, 256,256);
     }
 }

@@ -5,21 +5,21 @@ import java.util.Set;
 import app.common.Vector2d;
 import app.common.Vector2di;
 import javafx.animation.AnimationTimer;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import wolf.model.Enemy;
 import wolf.model.Player;
 import wolf.model.World;
 import wolf.view.WolfRenderer;
 
 public class WolfLoop extends AnimationTimer {
-    private final GraphicsContext gc;
     private Vector2di dim;
 
     private final WolfRenderer renderer;
-    private final Player player;
     private final World world;
+    private final Player player;
+    private final Enemy enemy;
 
     Set<KeyCode> keys;
     Set<MouseButton> mButtons;
@@ -31,16 +31,15 @@ public class WolfLoop extends AnimationTimer {
     private long updateTime;
     private long updateInterval;
 
-    public WolfLoop(GraphicsContext g, WolfRenderer r, World w, Player p, 
-                    Set<KeyCode> k, Set<MouseButton> m, Vector2d mouse, Vector2di d) {
+    public WolfLoop(WolfRenderer r, Vector2di d, Set<KeyCode> k, Set<MouseButton> m, Vector2d mouse) {
         updateTime = 0;
         updateInterval = 10_000_000;
 
-        gc = g;
         dim = d;
         renderer = r;
-        player = p;
-        world = w;
+        world = new World();
+        player = new Player();
+        enemy = new Enemy();
 
         keys = k;
         mButtons = m;
@@ -56,22 +55,18 @@ public class WolfLoop extends AnimationTimer {
     }
 
     private void handleInput() {
-        if (keys.contains(KeyCode.W)) {player.moveForward();};
-        if (keys.contains(KeyCode.S)) {player.moveBackward();};
+        if (keys.contains(KeyCode.W)) {player.moveForward(world.getArr());};
+        if (keys.contains(KeyCode.S)) {player.moveBackward(world.getArr());};
         if (keys.contains(KeyCode.A)) {player.lookLeft();};
         if (keys.contains(KeyCode.D)) {player.lookRight();};
 
-        if (mButtons.contains(MouseButton.PRIMARY)) {drawLine=true;}
-        else {drawLine=false;}
-        if (mButtons.contains(MouseButton.SECONDARY)) {drawIntersection=true;}
-        else {drawIntersection=false;}
+        if (keys.contains(KeyCode.SPACE)) {player.shoot();}
 
-    }
-
-    private void move() {
-    }
-
-    private void checkCollision() {
+        // 2d debugging inputs
+        //if (mButtons.contains(MouseButton.PRIMARY)) {drawLine=true;}
+        //else {drawLine=false;}
+        //if (mButtons.contains(MouseButton.SECONDARY)) {drawIntersection=true;}
+        //else {drawIntersection=false;} 
     }
 
     private void render2d() {
@@ -89,24 +84,30 @@ public class WolfLoop extends AnimationTimer {
         }
         // tegner linje fra spiller til nærmeste vegg i spillerens retnign
         if (drawIntersection) {
-            renderer.drawLine(player.getPos(), player.calcRay2d(world.getArr()));
+            double cameraX = 2 * 240 / (double)dim.y - 1; //x-coordinate in camera space
+            renderer.drawLine(player.getPos(), player.calcRay(world.getArr(), cameraX));
         }
     }
 
     private void render3d() {
         renderer.clear(Color.BLACK);
+        renderer.clearTop(Color.LIGHTBLUE);
+        renderer.clearBot(Color.GRAY);
         for (int x=0; x<dim.x; x++) {
-            double cameraX = 2 * x / (double)dim.y - 1; //x-coordinate in camera space
-            player.calcRay3d(world.getArr(), cameraX);
-            renderer.drawWallSegment(x,player.lastWallDist,player.lastWallType,player.lastWallSide);
+            //x-koordinat for kameraet 
+            double cameraX = 2 * x / (double)dim.x - 1;             
+            player.calcRay(world.getArr(), cameraX);
+            renderer.drawWallSegment(x,player.lwd,player.lwt,player.lws);
         }
+        renderer.drawGun(player.gun.getSprite());
     }
-    
+
     public void update() {
         handleInput();
-        move();
-        checkCollision();
-        //render2d();
+        player.update();
+        //enemies.update();
         render3d();
+
+        //render2d();
     }
 }
