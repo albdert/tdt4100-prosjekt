@@ -9,9 +9,10 @@ public class Gun {
 
     private String[] sprites = {GUN1,GUN2,GUN3,GUN4,GUN5};
 
-    private int ammo = 20;
+    private int ammo = 999;
 
     private boolean firing = false;
+    private boolean hit = false;
 
     private int aframe = 0;
     private int frames = 4;
@@ -49,6 +50,7 @@ public class Gun {
         if (aframe>frames) { 
             aframe=0; 
             firing = false;
+            hit = false;
             cooldownTimer = cooldownFrames;
         }
     }
@@ -61,7 +63,16 @@ public class Gun {
         return ammo;
     }
 
+    public void hit() {
+        hit = true;
+    }
+
     public boolean isFiring() {
         return firing;
     }
+
+    public boolean hasHit() {
+        return hit;
+    }
+    
 }

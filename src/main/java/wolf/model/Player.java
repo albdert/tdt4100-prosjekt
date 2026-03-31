@@ -122,12 +122,16 @@ public class Player {
         return new Vector2d(transformX / transformY, transformY); 
     }
 
-    public boolean checkHit(Vector2d enemy, int[][] world) {
-        Vector2di mappos = new Vector2di((int)enemy.y/20, (int)enemy.x/20);
+    public boolean checkHit(Vector2di enemy, int[][] world) {
+        if (!gun.isFiring() || gun.hasHit()) { return false; }
         double cameraX = 2 * 320 / (double)640 - 1; //x-coordinate in camera space
         calcRay(world, cameraX);
         for (Vector2di cell : hits) {
-            if (cell.equals(mappos)) { return true; }
+            //System.out.printf("Cell: %d, %d\nEnemy: %d, %d\n", cell.x, cell.y, enemy.x, enemy.y);
+            if (cell.equals(enemy)) { 
+                gun.hit();
+                return true; 
+            }
         }
         return false; 
     }

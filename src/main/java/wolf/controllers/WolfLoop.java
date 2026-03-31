@@ -66,6 +66,8 @@ public class WolfLoop extends AnimationTimer {
 
         if (keys.contains(KeyCode.SPACE)) {player.shoot();}
 
+        if (keys.contains(KeyCode.F)) {enemies.get(0).attack();}
+
         // 2d debugging inputs
         if (mButtons.contains(MouseButton.PRIMARY)) {drawLine=true;}
         else {drawLine=false;}
@@ -118,12 +120,9 @@ public class WolfLoop extends AnimationTimer {
 
     public void hitchecks() {
         for (Enemy enemy : enemies) {
-            if (player.getGun().isFiring()) {
-                System.out.println("Firing");
-                if (player.checkHit(enemy.getPos(), world.getArr())) {
-                    System.out.println("\nTreff!\n");
-                    enemy.shot();
-                }
+            if (player.checkHit(enemy.getMapPos(), world.getArr())) {
+                //System.out.println("\nTreff!\n");
+                enemy.shot();
             }
         }
     }
@@ -132,6 +131,7 @@ public class WolfLoop extends AnimationTimer {
         handleInput();
         player.update();
         hitchecks();
+        for (Enemy e : enemies) { e.update();}
         //enemies.update();
         render3d();
 
