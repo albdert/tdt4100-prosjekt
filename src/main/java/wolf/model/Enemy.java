@@ -16,9 +16,18 @@ public class Enemy {
     private Vector2d dpos = new Vector2d(0, 0);
     private double angle;
 
-     public Enemy() {
+    private boolean dead = false;
+    private int health = 2;
+
+    private int aframe = 0;
+    private int frames = 4;
+
+    private int frameDelay = 4;
+    private int frameTimer = 0;
+
+    public Enemy() {
         //gun = new Gun();
-        pos  = new Vector2d(60,40);
+        pos  = new Vector2d(40,120);
 
         angle  = 0;
         dpos.x = Math.cos(angle);
@@ -51,11 +60,38 @@ public class Enemy {
         pos = newpos;
     }
 
-    public void update() {
+    public void shot() {
+        if (health==0) { return; }
+        health--;
+        if (health==0) { frameTimer = frameDelay; }
+    }
 
+    public void update() {
+        if (dead) { return; }
+        if (health==0) {
+            if (frameTimer>0) {
+                frameTimer--;
+            } else {
+                nextFrame();
+                frameTimer = frameDelay;
+            }
+            return;
+        }
+    }
+
+    public void nextFrame() {
+        aframe++;
+        if (aframe>frames) { 
+            aframe=0; 
+            dead = true;
+        }
     }
 
     public String getSprite() {
         return sprites[0];
+    }
+
+    public Vector2d getPos() {
+        return pos;
     }
 }

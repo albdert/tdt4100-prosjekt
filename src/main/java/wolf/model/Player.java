@@ -11,6 +11,8 @@ public class Player {
 
     private double pi = Math.PI;
     private double tau = Math.TAU;
+
+    // pos.x = rad, pos.y = kolonne
     private Vector2d pos;    
     private Vector2d dpos = new Vector2d(0, 0);
     private Vector2d cplane = new Vector2d(0, 0);
@@ -27,24 +29,22 @@ public class Player {
         pos  = new Vector2d(40,40);
 
         angle  = 0;
-        dpos.x = Math.cos(angle);
-        dpos.y = Math.sin(angle);
-        cplane.x = Math.cos(angle + pi/2) * 0.66;
-        cplane.y = Math.sin(angle + pi/2) * 0.66;
+        angleChange();
     }
 
     public void lookLeft() {
         angle -= 0.04;
         if (angle<0) { angle+=tau; }
-        dpos.x = Math.cos(angle);
-        dpos.y = Math.sin(angle);
-        cplane.x = Math.cos(angle + pi/2) * 0.66;
-        cplane.y = Math.sin(angle + pi/2) * 0.66;
+        angleChange();
     }
 
     public void lookRight() {
         angle += 0.04;
         if (angle>tau) { angle-=tau; }
+        angleChange();
+    }
+
+    public void angleChange() {
         dpos.x = Math.cos(angle);
         dpos.y = Math.sin(angle);
         cplane.x = Math.cos(angle + pi/2) * 0.66;
@@ -114,8 +114,22 @@ public class Player {
         return new Vector2d(pos.x + dir.x * lwd * 20, pos.y + dir.y * lwd * 20);
     }
 
-    public void distanceTo(Vector2d v) {
-        
+    public Vector2d projectEnemy(Enemy enemy) {
+        Vector2d toEnemy = Vector2d.sub(enemy.getPos(), pos).div(20);
+        double invDet = 1.0 / (cplane.x * dpos.y - dpos.x * cplane.y);
+        double transformX = invDet * (dpos.y * toEnemy.x - dpos.x * toEnemy.y);
+        double transformY = invDet * (-cplane.y * toEnemy.x + cplane.x * toEnemy.y);
+        return new Vector2d(transformX / transformY, transformY); 
+    }
+
+    public boolean checkHit(Vector2d enemy, int[][] world) {
+        Vector2di mappos = new Vector2di((int)enemy.y/20, (int)enemy.x/20);
+        double cameraX = 2 * 320 / (double)640 - 1; //x-coordinate in camera space
+        calcRay(world, cameraX);
+        for (Vector2di cell : hits) {
+            if (cell.equals(mappos)) { return true; }
+        }
+        return false; 
     }
 
     public void update() {

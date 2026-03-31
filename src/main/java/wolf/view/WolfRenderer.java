@@ -111,9 +111,28 @@ public class WolfRenderer {
         gc.drawImage(gun, dim.x/2-128, dim.y-256, 256,256);
     }
 
-    public void drawEnemy(String path) {
-        Image gun = new Image(path);
-        gc.drawImage(gun, dim.x/2-32, dim.y-64);    
-        gc.drawImage(gun, dim.x/2-128, dim.y-256, 256,256);
+    public void drawEnemy(String path, Vector2d projection, double[] zBuffer) {
+        int spriteHeight = (int)(dim.y / (projection.y));
+        int spriteWidth = spriteHeight; 
+        
+        int screenX = (int)(dim.x / 2 * (1 + projection.x));
+        
+        int startX = screenX - spriteWidth / 2;
+        int endX = screenX + spriteWidth / 2;
+        
+        int startY = dim.y / 2 - spriteHeight / 2;
+        
+        //TODO: lagre denne og ikke opprett ny image hver gang
+        Image sprite = new Image(path);
+        
+        for (int x = startX; x < endX; x++) {
+            if (x < 0 || x >= dim.x) continue; // off screen
+            if (projection.y < zBuffer[x]) {  
+                double spritecol = (x - startX) / (double)spriteWidth;
+                int srcX = (int)(spritecol * sprite.getWidth());
+                gc.drawImage(sprite, srcX, 0, 1, sprite.getHeight(), 
+                             x, startY, 1, spriteHeight);            
+            }
+        }
     }
 }

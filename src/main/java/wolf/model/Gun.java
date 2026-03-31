@@ -9,7 +9,7 @@ public class Gun {
 
     private String[] sprites = {GUN1,GUN2,GUN3,GUN4,GUN5};
 
-    private int ammo = 4;
+    private int ammo = 20;
 
     private boolean firing = false;
 
@@ -59,5 +59,9 @@ public class Gun {
 
     public int getAmmo() {
         return ammo;
+    }
+
+    public boolean isFiring() {
+        return firing;
     }
 }

@@ -1,5 +1,7 @@
 package wolf.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import app.common.Vector2d;
@@ -19,7 +21,7 @@ public class WolfLoop extends AnimationTimer {
     private final WolfRenderer renderer;
     private final World world;
     private final Player player;
-    private final Enemy enemy;
+    private final List<Enemy> enemies;
 
     Set<KeyCode> keys;
     Set<MouseButton> mButtons;
@@ -37,9 +39,11 @@ public class WolfLoop extends AnimationTimer {
 
         dim = d;
         renderer = r;
+
         world = new World();
         player = new Player();
-        enemy = new Enemy();
+        enemies = new ArrayList<>();
+        enemies.add(new Enemy());
 
         keys = k;
         mButtons = m;
@@ -63,10 +67,10 @@ public class WolfLoop extends AnimationTimer {
         if (keys.contains(KeyCode.SPACE)) {player.shoot();}
 
         // 2d debugging inputs
-        //if (mButtons.contains(MouseButton.PRIMARY)) {drawLine=true;}
-        //else {drawLine=false;}
-        //if (mButtons.contains(MouseButton.SECONDARY)) {drawIntersection=true;}
-        //else {drawIntersection=false;} 
+        if (mButtons.contains(MouseButton.PRIMARY)) {drawLine=true;}
+        else {drawLine=false;}
+        if (mButtons.contains(MouseButton.SECONDARY)) {drawIntersection=true;}
+        else {drawIntersection=false;} 
     }
 
     private void render2d() {
@@ -84,7 +88,7 @@ public class WolfLoop extends AnimationTimer {
         }
         // tegner linje fra spiller til nærmeste vegg i spillerens retnign
         if (drawIntersection) {
-            double cameraX = 2 * 240 / (double)dim.y - 1; //x-coordinate in camera space
+            double cameraX = 2 * 320 / (double)dim.x - 1; //x-coordinate in camera space
             renderer.drawLine(player.getPos(), player.calcRay(world.getArr(), cameraX));
         }
     }
@@ -93,18 +97,41 @@ public class WolfLoop extends AnimationTimer {
         renderer.clear(Color.BLACK);
         renderer.clearTop(Color.LIGHTBLUE);
         renderer.clearBot(Color.GRAY);
+
+        double[] zBuffer = new double[dim.x];
         for (int x=0; x<dim.x; x++) {
-            //x-koordinat for kameraet 
             double cameraX = 2 * x / (double)dim.x - 1;             
             player.calcRay(world.getArr(), cameraX);
+            zBuffer[x] = player.lwd;
             renderer.drawWallSegment(x,player.lwd,player.lwt,player.lws);
         }
+
+        for (Enemy enemy : enemies) {
+            Vector2d projection = player.projectEnemy(enemy);
+            if (projection.y > 0 && Math.abs(projection.x) < 1) {
+                renderer.drawEnemy(enemy.getSprite(), projection, zBuffer);
+            }
+        }
+
         renderer.drawGun(player.gun.getSprite());
+    }
+
+    public void hitchecks() {
+        for (Enemy enemy : enemies) {
+            if (player.getGun().isFiring()) {
+                System.out.println("Firing");
+                if (player.checkHit(enemy.getPos(), world.getArr())) {
+                    System.out.println("\nTreff!\n");
+                    enemy.shot();
+                }
+            }
+        }
     }
 
     public void update() {
         handleInput();
         player.update();
+        hitchecks();
         //enemies.update();
         render3d();
 

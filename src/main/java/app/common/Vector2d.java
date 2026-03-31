@@ -13,6 +13,9 @@ public class Vector2d {
     public Vector2d times(double n) {
         return new Vector2d(x*n, y*n);
     }
+    public Vector2d div(double n) {
+        return new Vector2d(x/n, y/n);
+    }
     public static Vector2d add(Vector2d v1, Vector2d v2) {
         return new Vector2d(v1.x+v2.x, v1.y+v2.y);
     }
