@@ -5,6 +5,8 @@ import java.util.List;
 
 import app.common.Vector2d;
 import app.common.Vector2di;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class Player {
     public Gun gun;
@@ -24,27 +26,37 @@ public class Player {
     public int lwt = 0;
     public int lws = 0;
 
+    public IntegerProperty health;
+    public IntegerProperty armor;
+    private Runnable onGameOver = () -> {};
+
     public Player() {
         gun = new Gun();
         pos  = new Vector2d(40,40);
+        health = new SimpleIntegerProperty(100);
+        armor = new SimpleIntegerProperty(50);
 
         angle  = 0;
         angleChange();
     }
 
+    public void setOnGameOver(Runnable callback) {
+        this.onGameOver = callback;
+    }
+
     public void lookLeft() {
         angle -= 0.04;
-        if (angle<0) { angle+=tau; }
         angleChange();
     }
 
     public void lookRight() {
         angle += 0.04;
-        if (angle>tau) { angle-=tau; }
         angleChange();
     }
 
     public void angleChange() {
+        if (angle<0) { angle+=tau; }
+        if (angle>tau) { angle-=tau; }
         dpos.x = Math.cos(angle);
         dpos.y = Math.sin(angle);
         cplane.x = Math.cos(angle + pi/2) * 0.66;
@@ -65,6 +77,16 @@ public class Player {
 
     public void shoot() {
         gun.fire();
+    }
+
+    public void damaged(int damage) {
+        if (armor.get()>0) {
+            armor.set(armor.get()-damage); 
+            if (armor.get()<0) { armor.set(0);}
+            return;
+        }
+        health.set(health.get()-damage);
+        if (health.get()<=0) { onGameOver.run(); }
     }
 
     public Vector2d calcRay(int[][] world, double cameraX) {
@@ -127,7 +149,6 @@ public class Player {
         double cameraX = 2 * 320 / (double)640 - 1; //x-coordinate in camera space
         calcRay(world, cameraX);
         for (Vector2di cell : hits) {
-            //System.out.printf("Cell: %d, %d\nEnemy: %d, %d\n", cell.x, cell.y, enemy.x, enemy.y);
             if (cell.equals(enemy)) { 
                 gun.hit();
                 return true; 
@@ -139,7 +160,6 @@ public class Player {
     public void update() {
         gun.update();
     }
-
     public Gun getGun() {
         return gun;
     }
@@ -148,5 +168,14 @@ public class Player {
     } 
     public Vector2d getDeltaPos() {
         return new Vector2d(dpos.x, dpos.y);
+    }
+    public IntegerProperty healthProperty() {
+        return health;
+    }
+    public IntegerProperty armorProperty() {
+        return armor;
+    }
+    public IntegerProperty ammoProperty() {
+        return gun.ammoProperty();
     }
 }

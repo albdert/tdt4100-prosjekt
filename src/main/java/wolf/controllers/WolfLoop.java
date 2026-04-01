@@ -3,6 +3,7 @@ package wolf.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import app.common.Vector2d;
 import app.common.Vector2di;
@@ -33,17 +34,24 @@ public class WolfLoop extends AnimationTimer {
     private long updateTime;
     private long updateInterval;
 
-    public WolfLoop(WolfRenderer r, Vector2di d, Set<KeyCode> k, Set<MouseButton> m, Vector2d mouse) {
+    private Consumer<Integer> onScoreChanged = score -> {};
+
+    public WolfLoop(WolfRenderer r, Vector2di d, Player p, Set<KeyCode> k, Set<MouseButton> m, Vector2d mouse) {
         updateTime = 0;
         updateInterval = 10_000_000;
 
         dim = d;
         renderer = r;
 
+        player = p;
         world = new World();
-        player = new Player();
         enemies = new ArrayList<>();
-        enemies.add(new Enemy());
+        enemies.add(new Enemy(40,120));
+        enemies.add(new Enemy(120,425));
+        enemies.add(new Enemy(400,420));
+        enemies.get(0).setOnAttacking(damage -> player.damaged(damage));
+        enemies.get(1).setOnAttacking(damage -> player.damaged(damage));
+        enemies.get(2).setOnAttacking(damage -> player.damaged(damage));
 
         keys = k;
         mButtons = m;
@@ -56,6 +64,10 @@ public class WolfLoop extends AnimationTimer {
             update();
             updateTime = now;
         }
+    }
+    
+    public void setOnScoreChanged(Consumer<Integer> callback) {
+        this.onScoreChanged = callback;
     }
 
     private void handleInput() {
@@ -118,21 +130,21 @@ public class WolfLoop extends AnimationTimer {
         renderer.drawGun(player.gun.getSprite());
     }
 
-    public void hitchecks() {
+    public void enemyUpdate() {
         for (Enemy enemy : enemies) {
             if (player.checkHit(enemy.getMapPos(), world.getArr())) {
-                //System.out.println("\nTreff!\n");
                 enemy.shot();
+                if (enemy.getHealth()<=0) { onScoreChanged.accept(50); }
             }
+
+            enemy.update(player.getPos(), world.getArr());
         }
     }
 
     public void update() {
         handleInput();
         player.update();
-        hitchecks();
-        for (Enemy e : enemies) { e.update();}
-        //enemies.update();
+        enemyUpdate();
         render3d();
 
         //render2d();

@@ -1,5 +1,8 @@
 package wolf.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class Gun {
     public static final String GUN1  = "/sprites/gun1.png";
     public static final String GUN2  = "/sprites/gun2.png";
@@ -9,7 +12,7 @@ public class Gun {
 
     private String[] sprites = {GUN1,GUN2,GUN3,GUN4,GUN5};
 
-    private int ammo = 999;
+    private IntegerProperty ammo = new SimpleIntegerProperty(20);
 
     private boolean firing = false;
     private boolean hit = false;
@@ -24,9 +27,9 @@ public class Gun {
     private int cooldownTimer = 0;
 
     public void fire() {
-        if (ammo==0) { return; }
+        if (ammo.get()==0) { return; }
         if (!firing && cooldownTimer==0) { 
-            ammo--;
+            ammo.set(ammo.get()-1);
             firing = true;
             frameTimer = frameDelay;
         }
@@ -59,10 +62,6 @@ public class Gun {
         return sprites[aframe];
     }
 
-    public int getAmmo() {
-        return ammo;
-    }
-
     public void hit() {
         hit = true;
     }
@@ -75,4 +74,7 @@ public class Gun {
         return hit;
     }
     
+    public IntegerProperty ammoProperty() {
+        return ammo;
+    }
 }

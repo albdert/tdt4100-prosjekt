@@ -1,5 +1,7 @@
 package wolf.model;
 
+import java.util.function.Consumer;
+
 import app.common.Vector2d;
 import app.common.Vector2di;
 
@@ -30,7 +32,10 @@ public class Enemy {
 
     private boolean attacking = false;
     private boolean dead = false;
-    private int health = 2;
+    private int health = 4;
+    private int damage = 20;
+
+    private Consumer<Integer> onAttacking = damage -> {};
 
     Animator runAnim;
     Animator attackAnim;
@@ -40,12 +45,12 @@ public class Enemy {
     private int cooldownFrames = 4;
     private int cooldownTimer = 0;
 
-    public Enemy() {
-        pos  = new Vector2d(40,120);
+    public Enemy(int x, int y) {
+        pos  = new Vector2d(x,y);
 
         angle  = 0;
-        dpos.x = Math.cos(angle);
-        dpos.y = Math.sin(angle);
+        dpos.x = Math.cos(angle)*0.5;
+        dpos.y = Math.sin(angle)*0.5;
 
         runAnim = new Animator(running, 6);
         attackAnim = new Animator(attacks, 10);
@@ -67,14 +72,15 @@ public class Enemy {
         dpos.y = Math.sin(angle);
     }
 
-    public void moveForward(int[][] world) {
-        Vector2d newpos = new Vector2d((pos.x+dpos.x), (pos.y+dpos.y));
-        if (world[(int)(newpos.y/20)][(int)(newpos.x/20)]>0) { return; }
-        pos = newpos;
+    public void angleChange() {
+        if (angle<0) { angle+=tau; }
+        if (angle>tau) { angle-=tau; }
+        dpos.x = Math.cos(angle)*0.5;
+        dpos.y = Math.sin(angle)*0.5;
     }
 
-    public void moveBackward(int[][] world) {
-        Vector2d newpos = new Vector2d((pos.x-dpos.x), (pos.y-dpos.y));
+    public void moveForward(int[][] world) {
+        Vector2d newpos = new Vector2d((pos.x+dpos.x), (pos.y+dpos.y));
         if (world[(int)(newpos.y/20)][(int)(newpos.x/20)]>0) { return; }
         pos = newpos;
     }
@@ -97,15 +103,40 @@ public class Enemy {
         }
     }
 
-    public void update() {
+    public void setOnAttacking(Consumer<Integer> callback) {
+        this.onAttacking = callback;
+    }
+
+
+    public void update(Vector2d player, int[][] world) {
         if (dead) { return; }
         current.update();
+
+        // movement
+        double dist = Vector2d.sub(player, pos).len();
+        if (dist<150 && dist>15) {
+            Vector2d dir = Vector2d.sub(player, pos);
+            angle = Math.atan2(dir.y, dir.x);
+            angleChange();
+            moveForward(world);
+        }
+        if (dist<20) {
+            attack();
+        }
+
         if (!current.isFinished()) { return; }
         if (current==runAnim) { current.reset(); }
-        if (current==attackAnim) { current = runAnim; }
+        if (current==attackAnim) { 
+            current = runAnim; 
+            onAttacking.accept(damage);
+        }
         if (current==deathAnim) { dead = true; }
         if (cooldownTimer>0) { cooldownTimer--; }
         if (cooldownTimer==0) { attacking=false; }
+    }
+
+    public int getHealth() {
+        return health;
     }
 
     public String getSprite() {
