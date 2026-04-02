@@ -2,12 +2,12 @@ package app.controllers;
 
 import java.io.IOException;
 
-import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import app.SceneManager;
 import app.common.Paths;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 public class GameOverController {
     @FXML private Label scoreLabel;
