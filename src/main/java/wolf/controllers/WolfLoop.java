@@ -1,25 +1,28 @@
 package wolf.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import app.common.Vector2d;
 import app.common.Vector2di;
 import javafx.animation.AnimationTimer;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import wolf.model.Enemy;
 import wolf.model.Player;
 import wolf.model.World;
 import wolf.view.WolfRenderer;
 
 public class WolfLoop extends AnimationTimer {
-    private final GraphicsContext gc;
     private Vector2di dim;
 
     private final WolfRenderer renderer;
-    private final Player player;
     private final World world;
+    private final Player player;
+    private final List<Enemy> enemies;
 
     Set<KeyCode> keys;
     Set<MouseButton> mButtons;
@@ -31,16 +34,24 @@ public class WolfLoop extends AnimationTimer {
     private long updateTime;
     private long updateInterval;
 
-    public WolfLoop(GraphicsContext g, WolfRenderer r, World w, Player p, 
-                    Set<KeyCode> k, Set<MouseButton> m, Vector2d mouse, Vector2di d) {
+    private Consumer<Integer> onScoreChanged = score -> {};
+
+    public WolfLoop(WolfRenderer r, Vector2di d, Player p, Set<KeyCode> k, Set<MouseButton> m, Vector2d mouse) {
         updateTime = 0;
         updateInterval = 10_000_000;
 
-        gc = g;
         dim = d;
         renderer = r;
+
         player = p;
-        world = w;
+        world = new World();
+        enemies = new ArrayList<>();
+        enemies.add(new Enemy(40,120));
+        enemies.add(new Enemy(120,425));
+        enemies.add(new Enemy(400,420));
+        enemies.get(0).setOnAttacking(damage -> player.damaged(damage));
+        enemies.get(1).setOnAttacking(damage -> player.damaged(damage));
+        enemies.get(2).setOnAttacking(damage -> player.damaged(damage));
 
         keys = k;
         mButtons = m;
@@ -54,24 +65,26 @@ public class WolfLoop extends AnimationTimer {
             updateTime = now;
         }
     }
+    
+    public void setOnScoreChanged(Consumer<Integer> callback) {
+        this.onScoreChanged = callback;
+    }
 
     private void handleInput() {
-        if (keys.contains(KeyCode.W)) {player.moveForward();};
-        if (keys.contains(KeyCode.S)) {player.moveBackward();};
+        if (keys.contains(KeyCode.W)) {player.moveForward(world.getArr());};
+        if (keys.contains(KeyCode.S)) {player.moveBackward(world.getArr());};
         if (keys.contains(KeyCode.A)) {player.lookLeft();};
         if (keys.contains(KeyCode.D)) {player.lookRight();};
 
+        if (keys.contains(KeyCode.SPACE)) {player.shoot();}
+
+        if (keys.contains(KeyCode.F)) {enemies.get(0).attack();}
+
+        // 2d debugging inputs
         if (mButtons.contains(MouseButton.PRIMARY)) {drawLine=true;}
         else {drawLine=false;}
         if (mButtons.contains(MouseButton.SECONDARY)) {drawIntersection=true;}
-        else {drawIntersection=false;}
-
-    }
-
-    private void move() {
-    }
-
-    private void checkCollision() {
+        else {drawIntersection=false;} 
     }
 
     private void render2d() {
@@ -89,24 +102,51 @@ public class WolfLoop extends AnimationTimer {
         }
         // tegner linje fra spiller til nærmeste vegg i spillerens retnign
         if (drawIntersection) {
-            renderer.drawLine(player.getPos(), player.calcRay2d(world.getArr()));
+            double cameraX = 2 * 320 / (double)dim.x - 1; //x-coordinate in camera space
+            renderer.drawLine(player.getPos(), player.calcRay(world.getArr(), cameraX));
         }
     }
 
     private void render3d() {
         renderer.clear(Color.BLACK);
+        renderer.clearTop(Color.LIGHTBLUE);
+        renderer.clearBot(Color.GRAY);
+
+        double[] zBuffer = new double[dim.x];
         for (int x=0; x<dim.x; x++) {
-            double cameraX = 2 * x / (double)dim.y - 1; //x-coordinate in camera space
-            player.calcRay3d(world.getArr(), cameraX);
-            renderer.drawWallSegment(x,player.lastWallDist,player.lastWallType,player.lastWallSide);
+            double cameraX = 2 * x / (double)dim.x - 1;             
+            player.calcRay(world.getArr(), cameraX);
+            zBuffer[x] = player.lwd;
+            renderer.drawWallSegment(x,player.lwd,player.lwt,player.lws);
+        }
+
+        for (Enemy enemy : enemies) {
+            Vector2d projection = player.projectEnemy(enemy);
+            if (projection.y > 0 && Math.abs(projection.x) < 1) {
+                renderer.drawEnemy(enemy.getSprite(), projection, zBuffer);
+            }
+        }
+
+        renderer.drawGun(player.gun.getSprite());
+    }
+
+    public void enemyUpdate() {
+        for (Enemy enemy : enemies) {
+            if (player.checkHit(enemy.getMapPos(), world.getArr())) {
+                enemy.shot();
+                if (enemy.getHealth()<=0) { onScoreChanged.accept(50); }
+            }
+
+            enemy.update(player.getPos(), world.getArr());
         }
     }
-    
+
     public void update() {
         handleInput();
-        move();
-        checkCollision();
-        //render2d();
+        player.update();
+        enemyUpdate();
         render3d();
+
+        //render2d();
     }
 }
