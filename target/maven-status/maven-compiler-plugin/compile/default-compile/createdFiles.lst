@@ -1,4 +1,3 @@
-app/controllers/TestController.class
 snake/controllers/SnakeLoop.class
 app/SceneManager.class
 app/controllers/MainMenuController.class
@@ -22,4 +21,5 @@ app/App.class
 snake/view/SnakeRenderer.class
 app/controllers/PauseMenuController.class
 snake/controllers/SnakeController.class
+block/controllers/BlockController$1.class
 wolf/model/Player.class
