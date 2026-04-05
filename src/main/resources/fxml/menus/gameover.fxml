@@ -25,16 +25,16 @@
               style="-fx-padding: 32 32 28 32;
                      -fx-border-color: transparent transparent #1a1a2e transparent;
                      -fx-border-width: 0 0 2 0;">
-            <Label text="■"
+            <Label fx:id="gameOverSymbol" text="■"
                    style="-fx-text-fill: #f87171;
                           -fx-font-size: 28;
                           -fx-font-weight: bold;"/>
-            <Label text="GAME OVER"
+            <Label fx:id="gameOverTitle" text="GAME OVER"
                    style="-fx-text-fill: #ffffff;
                           -fx-font-size: 26;
                           -fx-font-weight: bold;
                           -fx-letter-spacing: 6;"/>
-            <Label text="BETTER LUCK NEXT TIME"
+            <Label fx:id="gameOverText" text="BETTER LUCK NEXT TIME"
                    style="-fx-text-fill: #333344;
                           -fx-font-size: 9;
                           -fx-font-weight: bold;

@@ -26,7 +26,8 @@ public class WolfRenderer {
         gc.fillRect(0, 0, 640, 240);
     }
     public void clearBot(Color c) {
-        gc.setFill(c);
+        //gc.setFill(c);
+        gc.setFill(Color.rgb(26, 26, 26));
         gc.fillRect(0, 240, 640, 480);
     }
 
@@ -90,10 +91,10 @@ public class WolfRenderer {
         if (end>=dim.y) { end=dim.y-1; }
         
         switch (type) {
-        case 1 -> gc.setStroke(Color.RED);
-        case 2 -> gc.setStroke(Color.GREEN);
-        case 3 -> gc.setStroke(Color.BLUE);
-        case 4 -> gc.setStroke(Color.WHITE);
+        case 1 -> gc.setStroke(Color.rgb(74, 74, 74));
+        case 2 -> gc.setStroke(Color.rgb(122, 92, 60));
+        case 3 -> gc.setStroke(Color.rgb(60, 106, 122));
+        case 4 -> gc.setStroke(Color.rgb(106, 60, 60));
         default-> gc.setStroke(Color.YELLOW);
         }
 

@@ -22,9 +22,11 @@ public abstract class GameController {
     @FXML protected StackPane root;
 
     private VBox pauseMenu;
+    protected PauseMenuController pmc;
     protected boolean isPaused = false;
 
     private VBox gameOverScreen;
+    protected GameOverController goc;
     protected boolean isGameOver = false;
 
     protected final Set<KeyCode> activeKeys = new HashSet<>();
@@ -91,7 +93,7 @@ public abstract class GameController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.GAMEOVER));
             gameOverScreen = loader.load();
-            GameOverController goc = loader.getController();
+            goc = loader.getController();
             goc.getScoreLabel().textProperty().bind(score.asString());
             goc.getLevelLabel().textProperty().bind(level.asString());
         } catch (IOException e) {
@@ -122,6 +124,11 @@ public abstract class GameController {
         root.getChildren().add(gameOverScreen);
         isGameOver = true;
         pauseGame();
+    }
+
+    public void gameWon() {
+        gameOver();
+        goc.showWinScreen();
     }
 
     /**

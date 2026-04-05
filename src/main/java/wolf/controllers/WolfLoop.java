@@ -35,6 +35,7 @@ public class WolfLoop extends AnimationTimer {
     private long updateInterval;
 
     private Consumer<Integer> onScoreChanged = score -> {};
+    private Runnable onGameWon = () -> {};
 
     public WolfLoop(WolfRenderer r, Vector2di d, Player p, Set<KeyCode> k, Set<MouseButton> m, Vector2d mouse) {
         updateTime = 0;
@@ -43,15 +44,13 @@ public class WolfLoop extends AnimationTimer {
         dim = d;
         renderer = r;
 
-        player = p;
         world = new World();
+
+        player = p;
+        player.setPos(world.getPlayerSpawn());
+
         enemies = new ArrayList<>();
-        enemies.add(new Enemy(40,120));
-        enemies.add(new Enemy(120,425));
-        enemies.add(new Enemy(400,420));
-        enemies.get(0).setOnAttacking(damage -> player.damaged(damage));
-        enemies.get(1).setOnAttacking(damage -> player.damaged(damage));
-        enemies.get(2).setOnAttacking(damage -> player.damaged(damage));
+        spawnEnemies();
 
         keys = k;
         mButtons = m;
@@ -65,9 +64,20 @@ public class WolfLoop extends AnimationTimer {
             updateTime = now;
         }
     }
+
+    public void spawnEnemies() {
+        for (Vector2d spawn : world.getEnemySpawns()) {
+            enemies.add(new Enemy(spawn));
+            enemies.getLast().setOnAttacking(damage -> player.damaged(damage));
+        }
+    }
     
     public void setOnScoreChanged(Consumer<Integer> callback) {
         this.onScoreChanged = callback;
+    }
+
+    public void setOnGameWon(Runnable callback) {
+        this.onGameWon = callback;
     }
 
     private void handleInput() {
@@ -131,7 +141,10 @@ public class WolfLoop extends AnimationTimer {
     }
 
     public void enemyUpdate() {
+        int total = enemies.size();
+        int cnt = 0;
         for (Enemy enemy : enemies) {
+            if (enemy.isDead()) { cnt++; }
             if (player.checkHit(enemy.getMapPos(), world.getArr())) {
                 enemy.shot();
                 if (enemy.getHealth()<=0) { onScoreChanged.accept(50); }
@@ -139,6 +152,8 @@ public class WolfLoop extends AnimationTimer {
 
             enemy.update(player.getPos(), world.getArr());
         }
+
+        if (cnt==total) { onGameWon.run(); }
     }
 
     public void update() {
