@@ -1,16 +1,15 @@
 package block.controllers;
 
+import app.controllers.GameController;
+import block.model.Blocks;
+import block.model.Player;
+import block.view.BlockRenderer;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-
-import app.controllers.GameController;
-import block.model.Blocks;
-import block.model.Player;
-import block.view.BlockRenderer;
 
 public class BlockController extends GameController {   
     private BlockRenderer renderer;
@@ -62,5 +61,10 @@ public class BlockController extends GameController {
     protected void resumeGame() { loop.start(); }
 
     public void startGame(){ loop.start(); }
+
+    @Override
+    public String getGameName() {
+        return "Block";
+    }
 }
 

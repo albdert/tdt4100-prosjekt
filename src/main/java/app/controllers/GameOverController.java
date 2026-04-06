@@ -2,6 +2,8 @@ package app.controllers;
 
 import java.io.IOException;
 
+import app.AppState;
+import app.FileManager;
 import app.SceneManager;
 import app.common.Paths;
 import javafx.event.ActionEvent;
@@ -14,8 +16,14 @@ public class GameOverController {
     @FXML private Label highScoreLabel;
     @FXML private Label levelLabel;
 
+    private GameController gameController;
+
     public Label getScoreLabel() { return scoreLabel; }
     public Label getLevelLabel() { return levelLabel; }
+
+    public void setGameController(GameController gc) {
+        this.gameController = gc;
+    }
 
     @FXML
     private void handleButtonClick(ActionEvent e) throws IOException {
@@ -36,5 +44,11 @@ public class GameOverController {
         SceneManager.getInstance().setScene(path);
     }  
 
-    private void savescore() {}
+    private void savescore() {
+        String username = AppState.getInstance().getPlayerName();
+        int newScore = Integer.parseInt(scoreLabel.getText());
+
+        FileManager fileManager = new FileManager();
+        fileManager.saveScores(gameController.getGameName(), username, newScore);
+    }
 }

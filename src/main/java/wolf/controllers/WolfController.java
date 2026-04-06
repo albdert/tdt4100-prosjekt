@@ -3,12 +3,12 @@ package wolf.controllers;
 import app.common.Vector2d;
 import app.common.Vector2di;
 import app.controllers.GameController;
-import wolf.model.Player;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import wolf.model.Player;
 import wolf.view.WolfRenderer;
 
 public class WolfController extends GameController {
@@ -58,4 +58,7 @@ public class WolfController extends GameController {
     
     @Override protected void pauseGame() { loop.stop(); }
     @Override protected void resumeGame() { loop.start(); }
+    @Override public String getGameName() {
+        return "Wolf";
+    }
 }

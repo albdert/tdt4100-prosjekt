@@ -1,12 +1,12 @@
 package snake.controllers;
 
-import javafx.fxml.FXML;
+import app.controllers.GameController;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import app.controllers.GameController;
 import snake.model.Food;
 import snake.model.Grid;
 import snake.model.Snake;
@@ -65,4 +65,8 @@ public class SnakeController extends GameController {
     protected void pauseGame() { loop.stop(); }
     @Override
     protected void resumeGame() { loop.start(); }
+    @Override
+    public String getGameName() {
+        return "Snake";
+    }
 } 
