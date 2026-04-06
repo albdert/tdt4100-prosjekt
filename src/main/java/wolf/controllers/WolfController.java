@@ -47,7 +47,8 @@ public class WolfController extends GameController {
         ammoLabel.textProperty().bind(player.ammoProperty().asString());
 
         loop = new WolfLoop(renderer, dim, player, activeKeys, activeMouseButtons, mouse);
-        loop.setOnScoreChanged(s -> score.set(s));
+        loop.setOnScoreChanged(s -> score.set(score.get() + s));
+        loop.setOnGameWon(() -> gameWon());
         loop.start();
     }
 

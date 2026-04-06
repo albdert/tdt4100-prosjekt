@@ -12,7 +12,7 @@ public class Gun {
 
     private String[] sprites = {GUN1,GUN2,GUN3,GUN4,GUN5};
 
-    private IntegerProperty ammo = new SimpleIntegerProperty(20);
+    private IntegerProperty ammo = new SimpleIntegerProperty(99);
 
     private boolean firing = false;
     private boolean hit = false;

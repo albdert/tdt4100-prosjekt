@@ -34,10 +34,14 @@ public class Player {
         gun = new Gun();
         pos  = new Vector2d(40,40);
         health = new SimpleIntegerProperty(100);
-        armor = new SimpleIntegerProperty(50);
+        armor = new SimpleIntegerProperty(100);
 
         angle  = 0;
         angleChange();
+    }
+
+    public void setPos(Vector2d newpos) {
+        pos = newpos;
     }
 
     public void setOnGameOver(Runnable callback) {

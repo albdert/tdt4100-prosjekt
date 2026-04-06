@@ -35,7 +35,6 @@ public class SnakeController extends GameController {
             case LEFT,A  -> {snake.changeDir(Dir.LEFT);}
             case RIGHT,D -> {snake.changeDir(Dir.RIGHT);}
             case ESCAPE -> {togglePauseMenu();}
-            //case SPACE -> {snake.extend();}
         }
     }
 

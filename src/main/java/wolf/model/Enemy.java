@@ -45,8 +45,8 @@ public class Enemy {
     private int cooldownFrames = 4;
     private int cooldownTimer = 0;
 
-    public Enemy(int x, int y) {
-        pos  = new Vector2d(x,y);
+    public Enemy(Vector2d spawn) {
+        pos  = spawn;
 
         angle  = 0;
         dpos.x = Math.cos(angle)*0.5;
@@ -133,6 +133,10 @@ public class Enemy {
         if (current==deathAnim) { dead = true; }
         if (cooldownTimer>0) { cooldownTimer--; }
         if (cooldownTimer==0) { attacking=false; }
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 
     public int getHealth() {
