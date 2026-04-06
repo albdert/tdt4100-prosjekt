@@ -15,6 +15,10 @@ public class FileManager{
     public void saveScores(String game, String username, int score) {
         Map<String, Map<String, Integer>> scores = loadScores();
 
+        if(!scores.containsKey(game)) {
+            scores.put(game, new HashMap <String, Integer>());
+        }
+
         if (!scores.get(game).containsKey(username) ||
            (score > scores.get(game).get(username))) {
             scores.get(game).put(username,score);
@@ -22,7 +26,7 @@ public class FileManager{
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (Map.Entry<String, Map<String, Integer>> games : scores.entrySet()) {
-                writer.write("#"+games.getKey());
+                writer.write("#"+games.getKey()+ "\n");
 
                 Map<String, Integer> inner = games.getValue();
                 for (Map.Entry<String, Integer> entry : inner.entrySet() ) {

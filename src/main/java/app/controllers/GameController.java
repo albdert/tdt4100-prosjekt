@@ -4,19 +4,19 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
 import app.AppState;
 import app.SceneManager;
 import app.common.Paths;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public abstract class GameController {
     @FXML protected StackPane root;
@@ -94,6 +94,7 @@ public abstract class GameController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.GAMEOVER));
             gameOverScreen = loader.load();
             goc = loader.getController();
+            goc.setGameController(this);
             goc.getScoreLabel().textProperty().bind(score.asString());
             goc.getLevelLabel().textProperty().bind(level.asString());
         } catch (IOException e) {
@@ -168,4 +169,6 @@ public abstract class GameController {
      * Klasse-spesifikk implementasjon for å fortsette spillet.
      */
     protected abstract void resumeGame();
+
+    public abstract String getGameName();
 }
