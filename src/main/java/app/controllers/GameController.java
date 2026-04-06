@@ -93,12 +93,8 @@ public abstract class GameController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.GAMEOVER));
             gameOverScreen = loader.load();
-<<<<<<< HEAD
-            GameOverController goc = loader.getController();
-            goc.setGameController(this);
-=======
             goc = loader.getController();
->>>>>>> f1a1026be5547377c92d9d758e567f24e483f8c3
+            goc.setGameController(this);
             goc.getScoreLabel().textProperty().bind(score.asString());
             goc.getLevelLabel().textProperty().bind(level.asString());
         } catch (IOException e) {

@@ -1,6 +1,7 @@
 #Snake
 Clem,300
 Ola,50000
+t3st,20
 Albert,1000
 testclemtest,70
 #Block
