@@ -17,8 +17,8 @@ public class MainMenuController {
 
         switch (id) {
             case "snake"      -> {setScene(Paths.SNAKE);}
-            case "tictactoe"  -> {setScene(Paths.BLOCK);}
-            case "test"       -> {setScene(Paths.WOLF);}
+            case "block"      -> {setScene(Paths.BLOCK);}
+            case "wolf"       -> {setScene(Paths.WOLF);}
             case "settings"   -> {setScene(Paths.NAMEINPUT);}
             case "highscores" -> {setScene(Paths.HIGHSCORE);}
             case "quit"       -> {Platform.exit();}

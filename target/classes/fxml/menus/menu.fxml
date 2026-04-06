@@ -8,6 +8,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.layout.Pane?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -36,189 +38,158 @@
               spacing="24"
               style="-fx-padding: 16 40 16 40;">
 
-            <!-- Snake -->
-            <StackPane fx:id="snake"
-                       onMouseClicked="#handleButtonClick"
-                       style="-fx-background-color: #1a1a2e;
-                              -fx-background-radius: 12;
-                              -fx-border-color: #2a2a4a;
-                              -fx-border-width: 2;
-                              -fx-border-radius: 12;
-                              -fx-cursor: hand;"
-                       prefWidth="230" prefHeight="280">
-                <VBox alignment="CENTER" spacing="16" style="-fx-padding: 24;">
+              <!-- Snake -->
+              <StackPane fx:id="snake"
+                         onMouseClicked="#handleButtonClick"
+                         style="-fx-background-color: #1a1a2e;
+                                -fx-background-radius: 12;
+                                -fx-border-color: #2a2a4a;
+                                -fx-border-width: 2;
+                                -fx-border-radius: 12;
+                                -fx-cursor: hand;"
+                         prefWidth="230" prefHeight="280">
+                  <VBox alignment="CENTER" spacing="16" style="-fx-padding: 24;">
+                      <StackPane style="-fx-background-color: #0a1628; -fx-background-radius: 8;"
+                                 prefWidth="160" prefHeight="160">
+                          <VBox alignment="CENTER" spacing="3" style="-fx-padding: 16;">
+                              <!-- Row 1: head + body going right-to-left -->
+                              <HBox spacing="3" alignment="CENTER">
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #22c55e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #4ade80; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                              </HBox>
+                              <!-- Row 2: turn down on left side -->
+                              <HBox spacing="3" alignment="CENTER">
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #ef4444; -fx-background-radius: 50;"/>
+                              </HBox>
+                              <!-- Row 3: body going right along bottom -->
+                              <HBox spacing="3" alignment="CENTER">
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                              </HBox>
+                              <!-- Row 4 -->
+                              <HBox spacing="3" alignment="CENTER">
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                              </HBox>
+                              <!-- Row 5 -->
+                              <HBox spacing="3" alignment="CENTER">
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                                  <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
+                              </HBox>
+                          </VBox>
+                      </StackPane>
+                      <VBox alignment="CENTER" spacing="4">
+                          <Label text="SNAKE" style="-fx-text-fill: #4ade80; -fx-font-size: 15; -fx-font-weight: bold; -fx-letter-spacing: 3;"/>
+                          <Label text="Classic arcade" style="-fx-text-fill: #44445a; -fx-font-size: 10;"/>
+                      </VBox>
+                  </VBox>
+              </StackPane>
 
-                    <!-- Snake preview grid drawn with nested HBoxes -->
-                    <StackPane style="-fx-background-color: #0a1628;
-                                      -fx-background-radius: 8;"
-                               prefWidth="160" prefHeight="160">
-                        <VBox alignment="CENTER" spacing="3" style="-fx-padding: 16;">
-                            <!-- Row 1 -->
-                            <HBox spacing="3" alignment="CENTER">
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #4ade80; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                            </HBox>
-                            <!-- Row 2 -->
-                            <HBox spacing="3" alignment="CENTER">
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #22c55e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #ef4444; -fx-background-radius: 50;"/>
-                            </HBox>
-                            <!-- Row 3 -->
-                            <HBox spacing="3" alignment="CENTER">
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                            </HBox>
-                            <!-- Row 4 -->
-                            <HBox spacing="3" alignment="CENTER">
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #16a34a; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                            </HBox>
-                            <!-- Row 5 -->
-                            <HBox spacing="3" alignment="CENTER">
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                                <StackPane prefWidth="16" prefHeight="16" style="-fx-background-color: #1a1a2e; -fx-background-radius: 2;"/>
-                            </HBox>
-                        </VBox>
-                    </StackPane>
+              <!-- Dodge -->
+              <StackPane fx:id="block"
+                         onMouseClicked="#handleButtonClick"
+                         style="-fx-background-color: #1a1a2e;
+                                -fx-background-radius: 12;
+                                -fx-border-color: #2a2a4a;
+                                -fx-border-width: 2;
+                                -fx-border-radius: 12;
+                                -fx-cursor: hand;"
+                         prefWidth="230" prefHeight="280">
+                  <VBox alignment="CENTER" spacing="16" style="-fx-padding: 24;">
+                      <StackPane style="-fx-background-color: #0a1628; -fx-background-radius: 8;"
+                                 prefWidth="160" prefHeight="160">
+                          <VBox alignment="BOTTOM_CENTER" spacing="0" style="-fx-padding: 10;">
+                              <!-- Falling block row 1 (top) -->
+                              <HBox spacing="6" alignment="CENTER" style="-fx-padding: 0 0 6 0;">
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #f472b6; -fx-background-radius: 3;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                              </HBox>
+                              <!-- Falling block row 2 -->
+                              <HBox spacing="6" alignment="CENTER" style="-fx-padding: 0 0 6 0;">
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #a78bfa; -fx-background-radius: 3;"/>
+                              </HBox>
+                              <!-- Falling block row 3 -->
+                              <HBox spacing="6" alignment="CENTER" style="-fx-padding: 0 0 6 0;">
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #f472b6; -fx-background-radius: 3;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                              </HBox>
+                              <!-- Spacer -->
+                              <HBox spacing="6" alignment="CENTER" style="-fx-padding: 0 0 6 0;">
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                              </HBox>
+                              <!-- Player block row (bottom) -->
+                              <HBox spacing="6" alignment="CENTER">
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #60a5fa; -fx-background-radius: 3;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                                  <StackPane prefWidth="20" prefHeight="20" style="-fx-background-color: #1a1a2e;"/>
+                              </HBox>
+                          </VBox>
+                      </StackPane>
+                      <VBox alignment="CENTER" spacing="4">
+                          <Label text="DODGE" style="-fx-text-fill: #60a5fa; -fx-font-size: 15; -fx-font-weight: bold; -fx-letter-spacing: 3;"/>
+                          <Label text="Avoid the blocks" style="-fx-text-fill: #44445a; -fx-font-size: 10;"/>
+                      </VBox>
+                  </VBox>
+              </StackPane>
 
-                    <VBox alignment="CENTER" spacing="4">
-                        <Label text="SNAKE"
-                               style="-fx-text-fill: #4ade80;
-                                      -fx-font-size: 15;
-                                      -fx-font-weight: bold;
-                                      -fx-letter-spacing: 3;"/>
-                        <Label text="Classic arcade"
-                               style="-fx-text-fill: #44445a;
-                                      -fx-font-size: 10;"/>
-                    </VBox>
-                </VBox>
-            </StackPane>
+              <!-- Wolf3D raycaster -->
+              <StackPane fx:id="wolf"
+                         onMouseClicked="#handleButtonClick"
+                         style="-fx-background-color: #1a1a2e;
+                                -fx-background-radius: 12;
+                                -fx-border-color: #2a2a4a;
+                                -fx-border-width: 2;
+                                -fx-border-radius: 12;
+                                -fx-cursor: hand;"
+                         prefWidth="230" prefHeight="280">
+                     <VBox alignment="CENTER" spacing="16" style="-fx-padding: 24;">
 
-            <!-- Tic Tac Toe -->
-            <StackPane fx:id="tictactoe"
-                       onMouseClicked="#handleButtonClick"
-                       style="-fx-background-color: #1a1a2e;
-                              -fx-background-radius: 12;
-                              -fx-border-color: #2a2a4a;
-                              -fx-border-width: 2;
-                              -fx-border-radius: 12;
-                              -fx-cursor: hand;"
-                       prefWidth="230" prefHeight="280">
-                <VBox alignment="CENTER" spacing="16" style="-fx-padding: 24;">
-
-                    <StackPane style="-fx-background-color: #0a1628;
-                                      -fx-background-radius: 8;"
-                               prefWidth="160" prefHeight="160">
-                        <VBox alignment="CENTER" spacing="0" style="-fx-padding: 16;">
-                            <!-- TTT row 1 -->
-                            <HBox spacing="0" alignment="CENTER">
-                                <Label text="X" prefWidth="44" prefHeight="44"
-                                       alignment="CENTER"
-                                       style="-fx-text-fill: #60a5fa; -fx-font-size: 22; -fx-font-weight: bold;
-                                              -fx-border-color: transparent #334155 #334155 transparent; -fx-border-width: 0 2 2 0;"/>
-                                <Label text="O" prefWidth="44" prefHeight="44"
-                                       alignment="CENTER"
-                                       style="-fx-text-fill: #f472b6; -fx-font-size: 22; -fx-font-weight: bold;
-                                              -fx-border-color: transparent #334155 #334155 #334155; -fx-border-width: 0 2 2 2;"/>
-                                <Label text="X" prefWidth="44" prefHeight="44"
-                                       alignment="CENTER"
-                                       style="-fx-text-fill: #60a5fa; -fx-font-size: 22; -fx-font-weight: bold;
-                                              -fx-border-color: transparent transparent #334155 #334155; -fx-border-width: 0 0 2 2;"/>
-                            </HBox>
-                            <!-- TTT row 2 -->
-                            <HBox spacing="0" alignment="CENTER">
-                                <Label text="O" prefWidth="44" prefHeight="44"
-                                       alignment="CENTER"
-                                       style="-fx-text-fill: #f472b6; -fx-font-size: 22; -fx-font-weight: bold;
-                                              -fx-border-color: #334155 #334155 #334155 transparent; -fx-border-width: 2 2 2 0;"/>
-                                <Label text="X" prefWidth="44" prefHeight="44"
-                                       alignment="CENTER"
-                                       style="-fx-text-fill: #60a5fa; -fx-font-size: 22; -fx-font-weight: bold;
-                                              -fx-border-color: #334155; -fx-border-width: 2;"/>
-                                <Label text=" " prefWidth="44" prefHeight="44"
-                                       alignment="CENTER"
-                                       style="-fx-border-color: #334155 transparent #334155 #334155; -fx-border-width: 2 0 2 2;"/>
-                            </HBox>
-                            <!-- TTT row 3 -->
-                            <HBox spacing="0" alignment="CENTER">
-                                <Label text=" " prefWidth="44" prefHeight="44"
-                                       alignment="CENTER"
-                                       style="-fx-border-color: #334155 #334155 transparent transparent; -fx-border-width: 2 2 0 0;"/>
-                                <Label text="O" prefWidth="44" prefHeight="44"
-                                       alignment="CENTER"
-                                       style="-fx-text-fill: #f472b6; -fx-font-size: 22; -fx-font-weight: bold;
-                                              -fx-border-color: #334155 #334155 transparent #334155; -fx-border-width: 2 2 0 2;"/>
-                                <Label text=" " prefWidth="44" prefHeight="44"
-                                       alignment="CENTER"
-                                       style="-fx-border-color: #334155 transparent transparent #334155; -fx-border-width: 2 0 0 2;"/>
-                            </HBox>
-                        </VBox>
-                    </StackPane>
-
-                    <VBox alignment="CENTER" spacing="4">
-                        <Label text="TIC TAC TOE"
-                               style="-fx-text-fill: #60a5fa;
-                                      -fx-font-size: 15;
-                                      -fx-font-weight: bold;
-                                      -fx-letter-spacing: 3;"/>
-                        <Label text="Strategy game"
-                               style="-fx-text-fill: #44445a;
-                                      -fx-font-size: 10;"/>
-                    </VBox>
-                </VBox>
-            </StackPane>
-
-            <!-- Test Game -->
-            <StackPane fx:id="test"
-                       onMouseClicked="#handleButtonClick"
-                       style="-fx-background-color: #1a1a2e;
-                              -fx-background-radius: 12;
-                              -fx-border-color: #2a2a4a;
-                              -fx-border-width: 2;
-                              -fx-border-radius: 12;
-                              -fx-cursor: hand;"
-                       prefWidth="230" prefHeight="280">
-                <VBox alignment="CENTER" spacing="16" style="-fx-padding: 24;">
-
-                    <StackPane style="-fx-background-color: #0a1628;
-                                      -fx-background-radius: 8;"
-                               prefWidth="160" prefHeight="160">
-                        <VBox alignment="CENTER" spacing="12">
-                            <Label text="?"
-                                   style="-fx-text-fill: #a78bfa;
-                                          -fx-font-size: 64;
-                                          -fx-font-weight: bold;"/>
-                        </VBox>
-                    </StackPane>
-
-                    <VBox alignment="CENTER" spacing="4">
-                        <Label text="TEST"
-                               style="-fx-text-fill: #a78bfa;
-                                      -fx-font-size: 15;
-                                      -fx-font-weight: bold;
-                                      -fx-letter-spacing: 3;"/>
-                        <Label text="Coming soon"
-                               style="-fx-text-fill: #44445a;
-                                      -fx-font-size: 10;"/>
-                    </VBox>
-                </VBox>
-            </StackPane>
-
+<Pane prefWidth="160" prefHeight="160">
+    <Rectangle x="0" y="0" width="160" height="160" fill="#0a1628"/>
+    <Rectangle x="0" y="0" width="160" height="80" fill="#111122"/>
+    <Rectangle x="14" y="68" width="13" height="24" fill="#23235a"/>
+    <Rectangle x="29" y="61" width="13" height="38" fill="#2d2d72"/>
+    <Rectangle x="44" y="52" width="13" height="56" fill="#3a3a9a"/>
+    <Rectangle x="59" y="42" width="13" height="76" fill="#4848b8"/>
+    <Rectangle x="74" y="32" width="13" height="96" fill="#5858cc"/>
+    <Rectangle x="89" y="42" width="13" height="76" fill="#4848b8"/>
+    <Rectangle x="104" y="52" width="13" height="56" fill="#3a3a9a"/>
+    <Rectangle x="119" y="61" width="13" height="38" fill="#2d2d72"/>
+    <Rectangle x="134" y="68" width="13" height="24" fill="#23235a"/>
+</Pane>
+                      <VBox alignment="CENTER" spacing="4">
+                          <Label text="WOLF3D" style="-fx-text-fill: #a78bfa; -fx-font-size: 15; -fx-font-weight: bold; -fx-letter-spacing: 3;"/>
+                          <Label text="Raycaster shooter" style="-fx-text-fill: #44445a; -fx-font-size: 10;"/>
+                      </VBox>
+                  </VBox>
+              </StackPane>
         </HBox>
     </center>
 

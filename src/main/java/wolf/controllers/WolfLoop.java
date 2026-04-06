@@ -161,7 +161,6 @@ public class WolfLoop extends AnimationTimer {
         player.update();
         enemyUpdate();
         render3d();
-
         //render2d();
     }
 }

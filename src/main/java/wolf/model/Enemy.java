@@ -23,7 +23,6 @@ public class Enemy {
     private String[] attacks = {a1,a2};
     private String[] death   = {d1,d2,d3,d4};
 
-    private double pi = Math.PI;
     private double tau = Math.TAU;
 
     private Vector2d pos;    
