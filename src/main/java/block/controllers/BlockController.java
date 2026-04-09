@@ -17,6 +17,7 @@ public class BlockController extends GameController {
     private Player player;
     private Blocks blocks;
 
+
     @FXML private Canvas canvas;
     private GraphicsContext gc;
 

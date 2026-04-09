@@ -15,6 +15,7 @@ public class BlockLoop extends AnimationTimer{
     private int frameCount;
     private int bui;
     private int bsi;
+    private int maxBlocks;
 
     private Runnable onGameOver = () -> {};
 
@@ -22,8 +23,9 @@ public class BlockLoop extends AnimationTimer{
         updateTime = 0;
         updateInterval = 50_000_000;
         frameCount = 0;
-        bui = 10;
-        bsi = 90;
+        bui = 5;
+        bsi = 15;
+        maxBlocks = 8;
 
         renderer = r;
         player = p;
@@ -45,11 +47,24 @@ public class BlockLoop extends AnimationTimer{
 
     public void update() {
         if (frameCount%bui==0) { blocks.update(player.getCol()); }
-        if (frameCount%bsi==0) { blocks.spawnBlock(); }
+        if (frameCount%bsi==0) { 
+            blocks.spawnBlock(); 
+        }
+
         if (blocks.isHit()) { onGameOver.run(); }
         renderer.clear();
         renderer.renderBlocks(blocks);
         renderer.renderPlayer(player);
         frameCount ++;
+    }
+    public void setBlockSpawnInterval( int interval) {
+        this.bsi = Math.max(interval, bui + 1);
+    }
+    public void setBlockUpdateInterval(int interval) {
+        this.bui = interval;
+        this.bsi = Math.max(bsi, bui + 1);
+    }
+    public void setMaxBlocks(int max) {
+        this.maxBlocks = max;
     }
 }
