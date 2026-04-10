@@ -1,24 +1,4 @@
 #Snake
-<<<<<<< HEAD
-Clem,300
-Ola,50000
-t3st,20
-Albert,1000
-testclemtest,70
-player,40
-=======
 player,10
->>>>>>> b4e256134a1c8a288eae37c66e551b88d7c84879
 #Block
 #Wolf
-<<<<<<< HEAD
-Johannes,1000
-hannah,100
-testperson,1000
-Sivert,50000
-Kasper,300
-aldert,1100
-teit,50000
-dust,300
-=======
->>>>>>> b4e256134a1c8a288eae37c66e551b88d7c84879

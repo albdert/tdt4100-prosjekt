@@ -1,0 +1,115 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle Bold
+skinparam classBackgroundColor #F8F8FF
+skinparam classBorderColor #7F77DD
+skinparam classArrowColor #534AB7
+skinparam abstractClassBackgroundColor #EEEDFE
+
+abstract class GameController {
+  - pauseMenu : VBox
+  - gameOverScreen : VBox
+  # activeKeys : Set<KeyCode>
+  # activeMouseButtons : Set<MouseButton>
+  # username : String
+  # score : IntegerProperty
+  # level : IntegerProperty
+
+  - initialize()
+  - initPauseMenu() : void
+  - initGameOverScreen() : void
+  # togglePauseMenu() : void
+  # gameOver() : void
+  
+  # {abstract} handleInput(key : KeyCode) : void
+  # {abstract} initGame() : void
+  # {abstract} pauseGame() : void
+  # {abstract} resumeGame() : void
+}
+
+class BlockController extends GameController {
+  - renderer : BlockRenderer
+  - loop : BlockLoop
+  - player : Player 
+  - blocks : Blocks 
+  
+  + startGame() : void
+}
+
+class SnakeController extends GameController {
+  - renderer : SnakeRenderer
+  - loop : SnakeLoop
+  - grid : Grid 
+  - snake : Snake 
+  - food : Food 
+}
+
+class WolfController extends GameController {
+  - renderer : WolfRenderer
+  - loop : WolfLoop
+  - player : Player
+  - mouse : Vector2d
+}
+
+class BlockLoop extends AnimationTimer {
+  - updateTime : long
+  - updateInterval : long
+  - bui : int 
+  - bsi : int 
+  - maxBlocks : int 
+  - onGameOver : Runnable 
+  
+  + BlockLoop(r : BlockRenderer, p : Player, b : Blocks)
+  + handle(now : long) : void
+  + setOnGameOver (callback : Runnable) : void
+  + update() : void
+}
+
+class SnakeLoop extends AnimationTimer {
+  - updateTime : long
+  - updateInterval : long
+  - sui : int
+  - onScoreChanged : Consumer<Integer>
+  - onLevelChanged : Consumer<Integer>
+  - onGameOver : Runnable 
+  
+  + SnakeLoop(r : SnakeRenderer, s : Snaker, f : Food)
+  + handle(now : long) : void
+  + setOnScoreChanged(callback : Consumer<Integer>)
+  + setOnLevelChanged(callback : Consumer<Integer>)
+  + setOnGameOver (callback : Runnable) : void
+  + update() : void
+  - updateState() : void
+  - spawnNewFood() : void
+  - render() : void
+}
+
+class WolfLoop extends AnimationTimer {
+  - updateTime : long
+  - updateInterval : long
+  - keys : Set<Keys>
+  - mButtons : Set<MouseButton>
+  - mPos : Vector2d
+  - onScoreChanged : Consumer<Integer>
+  - onGameWon : Runnable
+  
+  + WolfLoop(r : WolfRenderer, d : Vector2di, p : Player)
+  + handle(now : long)
+  + setOnScoreChanged(callback : Consumer<Integer>) : void
+  + setOnGameWon(callback : Runnable) : void
+  - spawnEnemies() : void
+  - handleInput() : void
+  + update() : void
+  - enemyUpdate() : void
+  - render2d() : void
+  - render3d() : void
+}
+
+BlockController *-- BlockLoop : loop
+SnakeController *-- SnakeLoop : loop
+WolfController *-- WolfLoop : loop
+
+hide AnimationTimer
+
+@enduml
