@@ -1,2 +1,2 @@
 #wolf
-testplayer,100
+testplayer,1000

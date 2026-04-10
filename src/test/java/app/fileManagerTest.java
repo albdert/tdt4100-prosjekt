@@ -25,4 +25,14 @@ public class fileManagerTest {
         assertEquals(1, scores.get("wolf").size());
         assertEquals(100, scores.get("wolf").get("testplayer"));
     }       
+
+    @Test
+    public void testOverwriteScore() {
+        Map<String, Map<String,Integer>> scores = m.loadScores();
+
+        assertEquals(100, scores.get("wolf").get("testplayer"));
+        m.saveScores("wolf", "testplayer", 1000);
+        scores = m.loadScores();
+        assertEquals(1000, scores.get("wolf").get("testplayer"));
+    }     
 }
