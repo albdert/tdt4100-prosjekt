@@ -13,6 +13,7 @@ Ingrid,50
 clem,4790
 #Wolf
 Johannes,1000
+hannah,100
 testperson,1000
 Sivert,50000
 Kasper,300

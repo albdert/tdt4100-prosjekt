@@ -121,13 +121,13 @@ public abstract class GameController {
     /**
      * Game over overlay
      */
-    public void gameOver() {
+    protected void gameOver() {
         root.getChildren().add(gameOverScreen);
         isGameOver = true;
         pauseGame();
     }
 
-    public void gameWon() {
+    protected void gameWon() {
         gameOver();
         goc.showWinScreen();
     }
