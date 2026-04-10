@@ -4,6 +4,7 @@ Ola,50000
 t3st,20
 Albert,1000
 testclemtest,70
+player,40
 #Block
 Linde,50000
 Adele,1000
@@ -14,5 +15,6 @@ Johannes,1000
 testperson,1000
 Sivert,50000
 Kasper,300
+aldert,1100
 teit,50000
 dust,300
