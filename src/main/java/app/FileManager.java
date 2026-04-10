@@ -9,8 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FileManager{
-    //private final static String filename = "highscores/highscores.txt";
-    private final static String filename = "highscores.txt";
+    private static String filename;
+
+    public FileManager() { filename = "highscores.txt";}
+    public FileManager(String p) { filename = p;}
 
     public void saveScores(String game, String username, int score) {
         Map<String, Map<String, Integer>> scores = loadScores();

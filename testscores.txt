@@ -1,0 +1,2 @@
+#wolf
+testplayer,100
