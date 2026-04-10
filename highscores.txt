@@ -10,6 +10,7 @@ Linde,50000
 Adele,1000
 Lea,300
 Ingrid,50
+clem,4790
 #Wolf
 Johannes,1000
 testperson,1000

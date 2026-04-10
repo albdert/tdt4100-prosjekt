@@ -38,6 +38,7 @@ public class Blocks {
         return false;
     }
 
+/* 
     public void spawnBlock() {
         Random random = new Random();
         for (int i=0; i<level+1; i++) {
@@ -47,7 +48,23 @@ public class Blocks {
             blocks.add(randomBlockSpawn);
         }
     }
+    */
+
+    public void spawnBlock() {
+        Random random = new Random();
+        int blocksToSpawn = Math.min(level + 1,8);
+        int spawned = 0;
     
+    while (spawned < blocksToSpawn) {
+        int randomCol = random.nextInt(9);
+        if (!isInAnotherBlock(randomCol)) {
+            Block randomBlockSpawn = new Block(randomCol);
+            blocks.add(randomBlockSpawn);
+            spawned++;
+        }
+    }
+}
+
     public void update(int col) {
         Iterator<Block> iterator = blocks.iterator();
         while (iterator.hasNext()) {
