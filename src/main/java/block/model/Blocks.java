@@ -64,7 +64,7 @@ public class Blocks {
         }
     }
 }
-
+//sjekker om spilleren blir truffet og om blocken går forbi "row" nummer 8 og skal gi score++
     public void update(int col) {
         Iterator<Block> iterator = blocks.iterator();
         while (iterator.hasNext()) {
