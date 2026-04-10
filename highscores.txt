@@ -1,5 +1,4 @@
 #Snake
-
+player,10
 #Block
-
 #Wolf

@@ -24,7 +24,6 @@ public class BlockController extends GameController {
     @FXML private Label scoreLabel;
     @FXML private Label highScoreLabel;
     @FXML private Label levelLabel;
-
     @FXML private TextField usernameField;
 
     @Override
